@@ -23,3 +23,5 @@ text
 about,
 contact,
 bibliographie
+4-
+en utilisant taiwin nous avons definit un breakpoitn donc le site est tant bien sur mobile que sur ordinateur
