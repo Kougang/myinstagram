@@ -1,0 +1,13 @@
+/* index.css ou un autre fichier principal comme customStyles.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.Home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem; /* Equivalent à space-y-4 en Tailwind */
+}
