@@ -19,20 +19,23 @@ function UpdateDisplayName() {
   };
 
   return (
-    <div className="bg-blue-500 text-white flex items-center justify-center  p-3">
-      <form onSubmit={handleNameChange}>
-        <label>
-          Print name :
-          <input
-            type="text"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            className="text-black"
-          />
-        </label>
+    <div className="bg-blue-500 text-white flex items-center justify-center  p-3 ">
+      <form
+        onSubmit={handleNameChange}
+        className="xs:flex flex-col xs:flex items-center xs:justify-center"
+      >
+        <label for="lab">Print name :</label>
+        <input
+          type="text"
+          id="lab"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          className="text-black"
+        />
+
         <button
           type="submit"
-          className=" ml-2 bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+          className=" ml-2 bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700 xs:px-2 xs:mt-1"
         >
           Update name
         </button>

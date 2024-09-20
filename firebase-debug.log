@@ -1,0 +1,14 @@
+[debug] [2024-09-20T16:50:45.341Z] ----------------------------------------------------------------------
+[debug] [2024-09-20T16:50:45.351Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\IMHOTEP\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2024-09-20T16:50:45.352Z] CLI Version:   13.16.0
+[debug] [2024-09-20T16:50:45.353Z] Platform:      win32
+[debug] [2024-09-20T16:50:45.353Z] Node Version:  v20.10.0
+[debug] [2024-09-20T16:50:45.353Z] Time:          Fri Sep 20 2024 17:50:45 GMT+0100 (heure normale d’Afrique de l’Ouest)
+[debug] [2024-09-20T16:50:45.354Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-09-20T16:50:45.839Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-09-20T16:50:45.840Z] > authorizing via signed-in user (kougangsopjio@gmail.com)
+[debug] [2024-09-20T16:50:45.841Z] [iam] checking project myinstagramdb-59f53 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-09-20T16:50:45.856Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/myinstagramdb-59f53:testIamPermissions [none]
+[debug] [2024-09-20T16:50:45.857Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/myinstagramdb-59f53:testIamPermissions x-goog-quota-user=projects/myinstagramdb-59f53
+[debug] [2024-09-20T16:50:45.858Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/myinstagramdb-59f53:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}

@@ -1,8 +1,10 @@
-import { Navigate } from "react";
+import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 
 function LockOut() {
+  // 1
+  const Navigate = useNavigate();
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {

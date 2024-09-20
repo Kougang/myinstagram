@@ -6,4 +6,12 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+
+  theme: {
+    extend: {
+      screens: {
+        xs: { max: "600px" }, // Breakpoint pour 500px et en dessous
+      },
+    },
+  },
 };

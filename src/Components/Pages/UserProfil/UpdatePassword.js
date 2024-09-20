@@ -28,30 +28,33 @@ function UpdatePassword() {
 
   return (
     <div className="bg-blue-500 text-white flex items-center justify-center  p-3">
-      <form onSubmit={handlePasswordChange}>
-        <label className=" ">
-          Current password :
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className=" m-2 border-2 border-black border-solid"
-          />
-        </label>
+      <form
+        onSubmit={handlePasswordChange}
+        className="xs:flex flex-col xs:items-center xs:justify-center "
+      >
+        <label for="pwd">Current password : </label>
+        <input
+          type="password"
+          id="pwd"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className=" m-2 border-2 border-black border-solid"
+        />
         <br />
-        <label className="m-2">
+
+        <label for="npw" className="m-2">
           New password:
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className=" m-2 border-2 border-black border-solid"
-          />
         </label>
-        <br />
+        <input
+          type="password"
+          id="npw"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          className=" m-2 border-2 border-black border-solid"
+        />
         <button
           type="submit"
-          className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700 ml-20 "
+          className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700 md:ml-40 "
         >
           Change password
         </button>

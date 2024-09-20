@@ -50,16 +50,16 @@ function ChangePrivacyStatus() {
   // <h2>Changer la visibilité du compte</h2>
 
   return (
-    <div className="bg-blue-500 text-white flex items-center justify-center p-3">
+    <div className="bg-blue-500 text-white flex items-center justify-center p-3 xs:flex flex-col ">
       <p>
         <span>Current status:</span> <strong>{privacyStatus}</strong>
       </p>
       <div className="ml-1">
         <button
           onClick={handlePrivacyToggle}
-          className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+          className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700 xs:text-xs "
         >
-          <span className="mr-1">Switch to mode</span>
+          <span className="mr-1 xs:text-xs ">Switch to mode</span>
           <span>{privacyStatus === "public" ? "privé" : "public"}</span>
         </button>
       </div>

@@ -29,7 +29,10 @@ function UpdateProfilePhoto() {
 
   return (
     <div className="bg-blue-500 text-white flex items-center justify-center  p-3">
-      <form onSubmit={handlePhotoChange}>
+      <form
+        onSubmit={handlePhotoChange}
+        className="xs:flex flex-col items-center justify-center"
+      >
         {photoURL && (
           <img
             className="border-2 border-black border-solid"
@@ -46,7 +49,7 @@ function UpdateProfilePhoto() {
         </label>
         <button
           type="submit"
-          className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+          className="bg-blue-800 text-white py-2 px-4 xs:mt-1 rounded hover:bg-blue-700"
         >
           Update picture
         </button>

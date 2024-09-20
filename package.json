@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "autoprefixer": "^10.4.20",
     "cra-template": "1.2.0",
     "dotenv": "^16.4.5",

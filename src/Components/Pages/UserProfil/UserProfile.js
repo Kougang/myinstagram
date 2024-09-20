@@ -11,7 +11,7 @@ function UserProfile() {
     // <div className="flex items-center justify-center  bg-gray-800">
     //   <section className="  bg-slate-900 flex flex-col w-2/5  items-center justify-center space-y-4"></section>
     <div className="flex items-center justify-center  bg-gray-800">
-      <main className="  bg-slate-900 flex flex-col w-2/5  ">
+      <main className="  bg-slate-900 flex flex-col w-full md:w-2/5  ">
         <Header />
         <h1 className="text-center p-2 text-white"> MANAGE YOUR PROFILE</h1>
         <hr />

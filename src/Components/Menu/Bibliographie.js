@@ -5,7 +5,7 @@ import Header from "../Home/Header";
 function Bibliographie() {
   return (
     <div className=" min-h-screen flex items-center justify-center  bg-gray-800">
-      <main className=" h-full bg-blue-500 text-white flex flex-col w-2/5  ">
+      <main className=" h-full bg-blue-500 text-white flex flex-col w-full md:w-2/5  ">
         <div className="">
           <Header />
         </div>

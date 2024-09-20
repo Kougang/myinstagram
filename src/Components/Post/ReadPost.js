@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import app from "./../../firebase/firebaseConfig";
+import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import { getDatabase, ref, onValue, update, push } from "firebase/database";
 import { v4 as uuidv4 } from "uuid"; // Assurez-vous d'importer uuid
 
@@ -139,7 +140,7 @@ function ReadPost() {
                 </video>
               )}
               {post.type === "audio" && (
-                <audio className="mb-4" controls>
+                <audio className="mb-4 xs:w-60" controls>
                   <source src={post.content} type="audio/mpeg" />
                   Your browser does not support the audio element.
                 </audio>
@@ -168,21 +169,21 @@ function ReadPost() {
                       </p>
 
                       {/* Répondre à un commentaire */}
-                      <div className="flex items-center space-x-4 mt-4">
+                      <div className="flex items-center space-x-2 sm:space-x-4 mt-4">
                         <input
                           type="text"
                           value={newReply[post.id] || ""}
                           onChange={(e) => handleReplyChange(e, post.id)}
                           placeholder="Reply to this comment"
-                          className="flex-1 p-2 rounded border border-gray-300 focus:outline-none"
+                          className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-0 xs:text-xs"
                         />
                         <button
                           onClick={() =>
                             handleCommentSubmit(post.id, post.type, commentId)
                           }
-                          className="bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded"
+                          className="bg-green-600 hover:bg-green-500 text-white py-1 px-2 sm:py-2 xs:px-0 xs:pl-1  text-xs sm:text-sm rounded rounded"
                         >
-                          Reply
+                          <PaperAirplaneIcon className="w-5 h-3 text-white transform rotate-45" />
                         </button>
                       </div>
 
@@ -211,13 +212,13 @@ function ReadPost() {
                     value={newComment[post.id] || ""}
                     onChange={(e) => handleCommentChange(e, post.id)}
                     placeholder="Add a comment"
-                    className="flex-1 p-2 rounded border border-gray-300 focus:outline-none"
+                    className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-1 xs:text-xs"
                   />
                   <button
                     onClick={() => handleCommentSubmit(post.id, post.type)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded"
+                    className="bg-blue-600 hover:bg-blue-500 text-white py-1 px-2 sm:py-2 xs:px-0 xs:pl-1  text-xs sm:text-sm rounded rounded"
                   >
-                    Submit
+                    <PaperAirplaneIcon className="w-5 h-4 text-white transform  rotate-45" />
                   </button>
                 </div>
               </div>

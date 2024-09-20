@@ -24,7 +24,7 @@ function Home() {
   return (
     // px-6 py-3 text-white rounded hover:bg-blue-700
     <div className="flex items-center justify-center  bg-gray-800">
-      <section className="  bg-slate-900 flex flex-col w-2/5  items-center justify-center space-y-4">
+      <section className="  bg-slate-900 flex flex-col w-full md:w-2/5 items-center justify-center space-y-4">
         <Header />
         <CreatePost user={user} />
         <ReadPost />
