@@ -27,7 +27,7 @@ function Home() {
       <section className="  bg-slate-900 flex flex-col w-full md:w-2/5 items-center justify-center space-y-4">
         <Header user={user} />
         <CreatePost user={user} />
-        <ReadPost />
+        <ReadPost user={user} />
         <Footer />
       </section>
     </div>

@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import app from "./../../firebase/firebaseConfig";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
-import { getDatabase, ref, onValue, update, push } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  update,
+  push,
+  remove,
+} from "firebase/database";
 import { v4 as uuidv4 } from "uuid"; // Assurez-vous d'importer uuid
 
-function ReadPost() {
+function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
   const [newComment, setNewComment] = useState({});
   const [newReply, setNewReply] = useState({});
@@ -71,6 +78,7 @@ function ReadPost() {
       id: newCommentId,
       text: commentText,
       createdAt: new Date().toISOString(),
+      userId: user?.uid,
     });
 
     // Mettre à jour l'état local pour afficher immédiatement le commentaire ou la réponse
@@ -109,6 +117,46 @@ function ReadPost() {
 
   const handleReplyChange = (e, postId) => {
     setNewReply((prev) => ({ ...prev, [postId]: e.target.value }));
+  };
+
+  // Fonction pour supprimer un post
+  const handleDeletePost = (postId, postType) => {
+    const db = getDatabase(app);
+    const postRef = ref(db, `posts/${postType}/${postId}`);
+
+    // Suppression dans Firebase
+    remove(postRef)
+      .then(() => {
+        // Mettre à jour l'état local pour supprimer le post de l'affichage
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+      })
+      .catch((error) => console.error("Error deleting post:", error));
+  };
+
+  // Fonction pour supprimer un commentaire
+  const handleDeleteComment = (postId, commentId, postType) => {
+    const db = getDatabase(app);
+    const commentRef = ref(
+      db,
+      `posts/${postType}/${postId}/comments/${commentId}`
+    );
+
+    // Suppression dans Firebase
+    remove(commentRef)
+      .then(() => {
+        // Mettre à jour l'état local pour supprimer le commentaire de l'affichage
+        setPosts((prevPosts) => {
+          return prevPosts.map((post) => {
+            if (post.id === postId) {
+              const updatedComments = { ...post.comments };
+              delete updatedComments[commentId]; // Supprimer le commentaire de l'objet
+              return { ...post, comments: updatedComments };
+            }
+            return post;
+          });
+        });
+      })
+      .catch((error) => console.error("Error deleting comment:", error));
   };
 
   return (
@@ -154,6 +202,16 @@ function ReadPost() {
                 Like: {likes[post.id] || post.likes?.likes || 0}
               </button>
 
+              {/* Bouton de suppression du post, visible uniquement si l'utilisateur est le propriétaire */}
+              {user?.uid === post.userId && (
+                <button
+                  onClick={() => handleDeletePost(post.id, post.type)}
+                  className="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded mb-4"
+                >
+                  Delete Post
+                </button>
+              )}
+
               {/* Zone de commentaires */}
               <div className="bg-gray-700 p-4 rounded-lg space-y-4">
                 <h3 className="text-xl font-semibold">Comments</h3>
@@ -167,6 +225,18 @@ function ReadPost() {
                       <p className="text-gray-300">
                         {post.comments[commentId].text}
                       </p>
+
+                      {/* Bouton de suppression de commentaire si tu est le proprietaire du commentaire*/}
+                      {user?.uid === post.comments[commentId]?.userId && (
+                        <button
+                          onClick={() =>
+                            handleDeleteComment(post.id, commentId, post.type)
+                          }
+                          className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded mt-2"
+                        >
+                          Delete Comment
+                        </button>
+                      )}
 
                       {/* Répondre à un commentaire */}
                       <div className="flex items-center space-x-2 sm:space-x-4 mt-4">
