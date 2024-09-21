@@ -9,7 +9,7 @@ function LockOut() {
     signOut(auth)
       .then(() => {
         console.log("Deconnexion");
-        return <Navigate to="/" />;
+        Navigate("/");
       })
       .catch((error) => console.error(error));
   };
@@ -19,7 +19,7 @@ function LockOut() {
       <div>
         <button
           onClick={handleSignOut}
-          className="bg-slate-900 px-6 py-3 text-white rounded hover:bg-blue-700"
+          className="bg-red-900 px-6 py-3 text-white rounded hover:bg-red-700"
         >
           Sign Out
         </button>

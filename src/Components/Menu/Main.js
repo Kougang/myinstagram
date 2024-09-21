@@ -7,6 +7,7 @@ import Bibliographie from "./Bibliographie";
 import UserProfile from "../Pages/UserProfil/UserProfile";
 import LockOut from "../Pages/LockOut/LockOut";
 import DropdownMenu from "./PrintMenu/DropdownMenu";
+// import SignInUp from "../Pages/SignInUp/SignInUp";
 
 function Main() {
   return (
@@ -19,12 +20,12 @@ function Main() {
       {/* Routes pour chaque composant */}
 
       <Routes>
+        {/* <Route path="/" element={<SignInUp user={user} />} />*/}
         <Route path="/Home" element={<Home />} />
         <Route path="/parameter" element={<UserProfile />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/bibliographie" element={<Bibliographie />} />
-        <Route path="/lockout" element={<LockOut />} />
       </Routes>
     </div>
   );

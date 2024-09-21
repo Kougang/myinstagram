@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import ToggleButton from "./ToggleButton";
 import DropdownList from "./DropdownList";
+import SignInUp from "../../Pages/SignInUp/SignInUp";
 
 function DropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,20 +17,10 @@ function DropdownMenu() {
     setIsOpen(false); // Ferme le menu après avoir cliqué sur un lien
   };
 
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Déconnexion réussie");
-      })
-      .catch((error) => console.error(error));
-  };
-
   return (
     <div className="relative">
       <ToggleButton toggleMenu={toggleMenu} />
-      {isOpen && (
-        <DropdownList closeMenu={closeMenu} handleSignOut={handleSignOut} />
-      )}
+      {isOpen && <DropdownList closeMenu={closeMenu} />}
     </div>
   );
 }

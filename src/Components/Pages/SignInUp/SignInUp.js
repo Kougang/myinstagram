@@ -111,6 +111,7 @@ function SignInUp({ user }) {
                 onChange={handleNameChange}
                 name="name"
                 className="h-10 border border-slate-900 rounded p-4"
+                required
               />
               <CheckUsername username={name} onCheck={setIsUsernameAvailable} />
             </>
@@ -124,6 +125,7 @@ function SignInUp({ user }) {
                 onChange={handleNameChange}
                 name="name"
                 className="h-10 border border-slate-900 rounded p-4"
+                required
               />
             </>
           )}
@@ -134,6 +136,7 @@ function SignInUp({ user }) {
             onChange={handleEmailChange}
             name="email"
             className="h-10 border border-slate-900 rounded p-4"
+            required
           />
 
           <label className="text-slate-900">Password</label>
@@ -142,6 +145,7 @@ function SignInUp({ user }) {
             onChange={handlePasswordChange}
             name="password"
             className="h-10 border border-slate-900 rounded p-4"
+            required
           />
 
           {isSignUpActive && (

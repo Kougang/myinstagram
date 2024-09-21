@@ -51,13 +51,22 @@ function DropdownList({ closeMenu, handleSignOut }) {
               Bibliographie
             </Link>
           </li>
+          {/*<li>
+            <Link
+              to="/Main/lockout"
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+              onClick={closeMenu} // Ferme le menu après un clic
+            >
+              lockout
+            </Link>
+          </li>*/}
 
-          <button
+          {/*   <button
             onClick={handleSignOut}
             className="bg-red-900 px-0 py-2 w-full -mb-1 mr-1 text-white rounded hover:bg-blue-700"
           >
             Sign Out
-          </button>
+          </button>*/}
         </ul>
       </div>
     </div>

@@ -5,6 +5,7 @@ import UpdatePassword from "./UpdatePassword";
 import ChangePrivacyStatus from "./ChangePrivacyStatus";
 import Header from "./../../Home/Header";
 import Footer from "../../Home/Footer";
+import LockOut from "../LockOut/LockOut";
 
 function UserProfile() {
   return (
@@ -55,6 +56,16 @@ function UserProfile() {
           <h2 className="text-center p-2 text-white">Update password</h2>
           <hr />
           <UpdatePassword />
+        </section>
+        <hr />
+        <hr />
+        <hr />
+        <hr />
+
+        <section>
+          {/*<h2 className="text-center p-2 text-white">Lock out</h2>
+          <hr />*/}
+          <LockOut />
         </section>
         <hr />
         <hr />
