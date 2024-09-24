@@ -18,15 +18,26 @@ function SignInUp({ user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
+  const [field, setField] = useState(false); // Field validation state
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleFormChange = () => {
     setIsSignUpActive(!isSignUpActive);
   };
 
+  // if (!isSignUpActive) {
+  //   setErrorMessage("");
+  // }
+
   const handleSignUp = (e) => {
     e.preventDefault();
-    if (!email || !password || !name) return;
 
+    if (!email || !password || !name) {
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    setErrorMessage("");
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -64,9 +75,15 @@ function SignInUp({ user }) {
   };
 
   const handleSignIn = (e) => {
-    console.log(email, password);
+    // console.log(email, password);
     e.preventDefault();
-    if (!email || !password) return;
+    if (!email || !password) {
+      setField(true);
+      setErrorMessage("Veuillez remplir tous les champs");
+      return;
+    }
+
+    setErrorMessage("");
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -117,19 +134,6 @@ function SignInUp({ user }) {
             </>
           )}
 
-          {!isSignUpActive && (
-            <>
-              <label className="text-slate-900">Name</label>
-              <input
-                type="text"
-                onChange={handleNameChange}
-                name="name"
-                className="h-10 border border-slate-900 rounded p-4"
-                required
-              />
-            </>
-          )}
-
           <label className="text-slate-900">Email</label>
           <input
             type="email"
@@ -148,6 +152,8 @@ function SignInUp({ user }) {
             required
           />
 
+          {field && <p className="text-red-500">{errorMessage}</p>}
+
           {isSignUpActive && (
             <button
               onClick={handleSignUp}
@@ -158,6 +164,7 @@ function SignInUp({ user }) {
               Sign Up
             </button>
           )}
+
           {!isSignUpActive && (
             <button
               onClick={handleSignIn}
