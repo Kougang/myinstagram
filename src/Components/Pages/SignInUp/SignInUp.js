@@ -20,14 +20,18 @@ function SignInUp({ user }) {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
   const [field, setField] = useState(false); // Field validation state
   const [errorMessage, setErrorMessage] = useState("");
+  const [badpeErrorMessage, setBadpeErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [badpe, setBadpe] = useState(false); // athentification state
 
   const handleFormChange = () => {
     setIsSignUpActive(!isSignUpActive);
   };
 
-  // if (!isSignUpActive) {
-  //   setErrorMessage("");
-  // }
+  const handleEyes = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -77,29 +81,49 @@ function SignInUp({ user }) {
   const handleSignIn = (e) => {
     // console.log(email, password);
     e.preventDefault();
+
     if (!email || !password) {
       setField(true);
-      setErrorMessage("Veuillez remplir tous les champs");
+      setBadpe(true);
+      setErrorMessage("Please complete all fields");
       return;
     }
 
     setErrorMessage("");
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        setBadpe(false);
+        setBadpeErrorMessage("");
         const user = userCredential.user;
         console.log(user);
+
         setLoggedInUser(user);
       })
       .catch((error) => {
+        setBadpe(true);
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        console.log("mauvaise authentification ou echec d authentification");
+        setBadpeErrorMessage("Enter corrects informations");
       });
   };
 
-  const handleEmailChange = (event) => setEmail(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
-  const handleNameChange = (event) => setName(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    setBadpeErrorMessage("");
+    setErrorMessage("");
+  };
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    setBadpeErrorMessage("");
+    setErrorMessage("");
+  };
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+    setBadpeErrorMessage("");
+    setErrorMessage("");
+  };
 
   if (user) {
     return <Navigate to="/Home" />;
@@ -144,15 +168,27 @@ function SignInUp({ user }) {
           />
 
           <label className="text-slate-900">Password</label>
-          <input
-            type="password"
-            onChange={handlePasswordChange}
-            name="password"
-            className="h-10 border border-slate-900 rounded p-4"
-            required
-          />
+          <div>
+            <input
+              type={showPassword ? "text" : "password"}
+              onChange={handlePasswordChange}
+              name="password"
+              className="h-10 border border-slate-900 rounded p-4"
+              required
+            />
 
-          {field && <p className="text-red-500">{errorMessage}</p>}
+            {showPassword ? (
+              <span role="img" aria-label="Hide password" onClick={handleEyes}>
+                👁️
+              </span>
+            ) : (
+              <span role="img" aria-label="Show password" onClick={handleEyes}>
+                👁️‍🗨️
+              </span>
+            )}
+          </div>
+
+          {field && <p className="text-red-500 text-center">{errorMessage}</p>}
 
           {isSignUpActive && (
             <button
@@ -166,13 +202,30 @@ function SignInUp({ user }) {
           )}
 
           {!isSignUpActive && (
-            <button
-              onClick={handleSignIn}
-              type="submit"
-              className="bg-slate-900 px-3 py-1.5 text-white my-3  rounded hover:bg-blue-700"
-            >
-              Sign In
-            </button>
+            <div className="flex items-center justify-center">
+              {!badpe && (
+                <button
+                  onClick={handleSignIn}
+                  type="submit"
+                  className="bg-slate-900 px-3 py-1.5 text-white my-3  rounded hover:bg-blue-700"
+                >
+                  Sign In
+                </button>
+              )}
+
+              {badpe && (
+                <div className="flex  flex-col items-center justify-center">
+                  <p className="text-red-500">{badpeErrorMessage}</p>
+                  <button
+                    onClick={handleSignIn}
+                    type="submit"
+                    className="bg-slate-900 px-3 py-1.5 text-white my-3  rounded hover:bg-red-700"
+                  >
+                    Sign In
+                  </button>
+                </div>
+              )}
+            </div>
           )}
 
           {isSignUpActive && (
