@@ -14,12 +14,7 @@ import ReadPosts from "./Components/Post/ReadPost";
 import UserProfile from "./Components/Pages/UserProfil/UserProfile";
 import Main from "./Components/Menu/Main";
 
-// import Contact from "./Components/Menu/Contact";
-// import About from "./Components/Menu/About";
-// import Bibliographie from "./Components/Menu/Bibliographie";
-// // import UserProfile from "./Components/Pages/UserProfil/UserProfile";
-// import LockOut from "./Components/Pages/LockOut/LockOut";
-// // import DropdownMenu from "./Components/Menu/PrintMenu/DropdownMenu";
+import AppLoadScreen from "./Components/LoadingScreen/AppLoadScreen";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -39,7 +34,7 @@ function App() {
   }, []);
 
   if (isFetch) {
-    return <h2>En cours de connexion</h2>;
+    return <AppLoadScreen />;
   }
 
   return (
