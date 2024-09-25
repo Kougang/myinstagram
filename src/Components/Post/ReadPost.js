@@ -19,6 +19,7 @@ function ReadPost({ user }) {
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
   const [deleteComment, setDeleteComment] = useState(false);
+  // const [userComment,  setUserComment] = useState("")
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -66,7 +67,6 @@ function ReadPost({ user }) {
   };
 
   const handleCommentSubmit = (postId, postType, parentCommentId = null) => {
-    // setDeleteComment(true);
     const db = getDatabase(app);
     const commentRef = parentCommentId
       ? ref(
@@ -77,8 +77,10 @@ function ReadPost({ user }) {
 
     const commentText = parentCommentId ? newReply[postId] : newComment[postId];
     const newCommentId = uuidv4(); // Créer un nouvel ID unique
-    setUName(user?.displayName);
+    const commentUserId = user?.uid;
+
     setUProfilePhoto(user?.photoURL);
+    setUName(user?.displayName);
 
     push(commentRef, {
       id: newCommentId,
@@ -116,6 +118,10 @@ function ReadPost({ user }) {
       setNewReply((prev) => ({ ...prev, [postId]: "" }));
     } else {
       setNewComment((prev) => ({ ...prev, [postId]: "" }));
+    }
+
+    if (user?.uid === commentUserId) {
+      setDeleteComment(true);
     }
   };
 
@@ -245,32 +251,38 @@ function ReadPost({ user }) {
                       {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le commentaire */}
                       <div className="flex items-center mb-2">
                         {post.comments[commentId]?.userProfilePhoto ? (
-                          <img
-                            src={post.comments[commentId]?.userProfilePhoto}
-                            alt="pro.pic"
-                            className="w-6 h-6 rounded-full mr-2"
-                          />
+                          <div className="flex">
+                            <img
+                              src={post.comments[commentId]?.userProfilePhoto}
+                              alt="pro.pic"
+                              className="w-6 h-6 rounded-full mr-2"
+                            />
+                            <p className="text-gray-400">
+                              {post.comments[commentId]?.userName}
+                            </p>
+                          </div>
                         ) : (
-                          <img
-                            src={uProfilePhoto}
-                            alt="pro.pic"
-                            className="w-6 h-6 rounded-full mr-2"
-                          />
+                          <div>
+                            <img
+                              src={uProfilePhoto}
+                              alt="pro.pic"
+                              className="w-6 h-6 rounded-full mr-2"
+                            />
+                            <p className="text-gray-400">
+                              {post.comments[commentId]?.userName || uName}
+                            </p>
+                          </div>
                         )}
 
-                        <p className="text-gray-400">
-                          {post.comments[commentId]?.userName || uName}
-                        </p>
-
                         {/* Bouton de suppression de commentaire si tu est l'auteur du commentaire*/}
-                        {!deleteComment && (
+                        {deleteComment && (
                           <button
                             onClick={() =>
                               handleDeleteComment(post.id, commentId, post.type)
                             }
                             className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded mt-2 ml-2"
                           >
-                            Delete Comment
+                            Delete
                           </button>
                         )}
                       </div>
@@ -306,7 +318,10 @@ function ReadPost({ user }) {
                               key={replyId}
                               className="ml-6 mt-2 text-gray-400"
                             >
-                              {post.comments[commentId].replies[replyId].text}
+                              {typeof post.comments[commentId].replies[replyId]
+                                .text === "string"
+                                ? post.comments[commentId].replies[replyId].text
+                                : "Invalid reply format"}
                             </p>
                           )
                         )}
