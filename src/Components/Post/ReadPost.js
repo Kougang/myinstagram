@@ -16,6 +16,8 @@ function ReadPost({ user }) {
   const [newComment, setNewComment] = useState({});
   const [newReply, setNewReply] = useState({});
   const [likes, setLikes] = useState({});
+  const [uName, setUName] = useState("");
+  const [uProfilePhoto, setUProfilePhoto] = useState("");
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -73,12 +75,16 @@ function ReadPost({ user }) {
 
     const commentText = parentCommentId ? newReply[postId] : newComment[postId];
     const newCommentId = uuidv4(); // Créer un nouvel ID unique
+    setUName(user?.displayName);
+    setUProfilePhoto(user?.photoURL);
 
     push(commentRef, {
       id: newCommentId,
       text: commentText,
       createdAt: new Date().toISOString(),
       userId: user?.uid,
+      userName: user?.displayName, // Ajout du nom d'utilisateur
+      userProfilePhoto: user?.photoURL, // Ajout de la photo de profil de l'utilisateur
     });
 
     // Mettre à jour l'état local pour afficher immédiatement le commentaire ou la réponse
@@ -170,6 +176,18 @@ function ReadPost({ user }) {
               key={post.id}
               className="post-item w-full bg-gray-800 p-6 mb-6 rounded-lg shadow-md"
             >
+              {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post */}
+              <div className="flex items-center mb-4">
+                {post.userProfilePhoto && (
+                  <img
+                    src={post.userProfilePhoto}
+                    alt={post.userName}
+                    className="w-8 h-8 rounded-full mr-2"
+                  />
+                )}
+                <p className="text-white font-semibold">{post.userName}</p>
+              </div>
+
               <p className="mb-4 text-white text-center">{post.description}</p>
 
               {/* Afficher le contenu selon le type */}
@@ -222,6 +240,27 @@ function ReadPost({ user }) {
                       key={commentId}
                       className="border-b border-gray-500 pb-4 mb-4"
                     >
+                      {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le commentaire */}
+                      <div className="flex items-center mb-2">
+                        {post.comments[commentId]?.userProfilePhoto ? (
+                          <img
+                            src={post.comments[commentId]?.userProfilePhoto}
+                            alt="pro.pic"
+                            className="w-6 h-6 rounded-full mr-2"
+                          />
+                        ) : (
+                          <img
+                            src={uProfilePhoto}
+                            alt="pro.pic"
+                            className="w-6 h-6 rounded-full mr-2"
+                          />
+                        )}
+
+                        <p className="text-gray-400">
+                          {post.comments[commentId]?.userName || uName}
+                        </p>
+                      </div>
+
                       <p className="text-gray-300">
                         {post.comments[commentId].text}
                       </p>
@@ -247,6 +286,7 @@ function ReadPost({ user }) {
                           placeholder="Reply to this comment"
                           className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-0 xs:text-xs"
                         />
+
                         <button
                           onClick={() =>
                             handleCommentSubmit(post.id, post.type, commentId)

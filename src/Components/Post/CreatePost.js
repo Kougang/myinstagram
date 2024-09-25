@@ -51,6 +51,8 @@ function CreatePost({ user }) {
       type: postType,
       description,
       timestamp: Date.now(),
+      userName: user?.displayName, // Ajout du nom d'utilisateur
+      userProfilePhoto: user?.photoURL, // Ajout de la photo de profil de l'utilisateur
     });
     setDescription("");
     alert("Post created successfully!");
