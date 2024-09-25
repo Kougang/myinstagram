@@ -19,7 +19,6 @@ function ReadPost({ user }) {
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
   const [deleteComment, setDeleteComment] = useState(false);
-  // const [userComment,  setUserComment] = useState("")
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -75,20 +74,21 @@ function ReadPost({ user }) {
         )
       : ref(db, `posts/${postType}/${postId}/comments`);
 
-    const commentText = parentCommentId ? newReply[postId] : newComment[postId];
+    const commentText = parentCommentId
+      ? newReply[postId]?.[parentCommentId]
+      : newComment[postId];
     const newCommentId = uuidv4(); // Créer un nouvel ID unique
-    const commentUserId = user?.uid;
 
-    setUProfilePhoto(user?.photoURL);
     setUName(user?.displayName);
+    setUProfilePhoto(user?.photoURL);
 
     push(commentRef, {
       id: newCommentId,
       text: commentText,
       createdAt: new Date().toISOString(),
       userId: user?.uid,
-      userName: user?.displayName, // Ajout du nom d'utilisateur
-      userProfilePhoto: user?.photoURL, // Ajout de la photo de profil de l'utilisateur
+      userName: user?.displayName,
+      userProfilePhoto: user?.photoURL,
     });
 
     // Mettre à jour l'état local pour afficher immédiatement le commentaire ou la réponse
@@ -115,13 +115,12 @@ function ReadPost({ user }) {
 
     // Réinitialiser les champs de commentaire ou de réponse
     if (parentCommentId) {
-      setNewReply((prev) => ({ ...prev, [postId]: "" }));
+      setNewReply((prev) => ({
+        ...prev,
+        [postId]: { ...prev[postId], [parentCommentId]: "" },
+      }));
     } else {
       setNewComment((prev) => ({ ...prev, [postId]: "" }));
-    }
-
-    if (user?.uid === commentUserId) {
-      setDeleteComment(true);
     }
   };
 
@@ -129,8 +128,14 @@ function ReadPost({ user }) {
     setNewComment((prev) => ({ ...prev, [postId]: e.target.value }));
   };
 
-  const handleReplyChange = (e, postId) => {
-    setNewReply((prev) => ({ ...prev, [postId]: e.target.value }));
+  const handleReplyChange = (e, postId, commentId) => {
+    setNewReply((prev) => ({
+      ...prev,
+      [postId]: {
+        ...prev[postId],
+        [commentId]: e.target.value,
+      },
+    }));
   };
 
   // Fonction pour supprimer un post
@@ -262,7 +267,7 @@ function ReadPost({ user }) {
                             </p>
                           </div>
                         ) : (
-                          <div>
+                          <div className="flex">
                             <img
                               src={uProfilePhoto}
                               alt="pro.pic"
@@ -274,8 +279,9 @@ function ReadPost({ user }) {
                           </div>
                         )}
 
-                        {/* Bouton de suppression de commentaire si tu est l'auteur du commentaire*/}
-                        {deleteComment && (
+                        {/*Bouton de suppression de commentaire si tu est l auteur du commentaire*/}
+                        {/*deleteComment*/}
+                        {post.comments[commentId]?.userId === user?.uid && (
                           <button
                             onClick={() =>
                               handleDeleteComment(post.id, commentId, post.type)
@@ -294,8 +300,10 @@ function ReadPost({ user }) {
                       <div className="flex items-center space-x-2 sm:space-x-4 mt-4">
                         <input
                           type="text"
-                          value={newReply[post.id] || ""}
-                          onChange={(e) => handleReplyChange(e, post.id)}
+                          value={newReply[post.id]?.[commentId] || ""}
+                          onChange={(e) =>
+                            handleReplyChange(e, post.id, commentId)
+                          }
                           placeholder="Reply to this comment"
                           className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-0 xs:text-xs"
                         />
