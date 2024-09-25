@@ -18,6 +18,7 @@ function ReadPost({ user }) {
   const [likes, setLikes] = useState({});
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
+  const [deleteComment, setDeleteComment] = useState(false);
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -65,6 +66,7 @@ function ReadPost({ user }) {
   };
 
   const handleCommentSubmit = (postId, postType, parentCommentId = null) => {
+    // setDeleteComment(true);
     const db = getDatabase(app);
     const commentRef = parentCommentId
       ? ref(
@@ -259,23 +261,22 @@ function ReadPost({ user }) {
                         <p className="text-gray-400">
                           {post.comments[commentId]?.userName || uName}
                         </p>
-                      </div>
 
+                        {/* Bouton de suppression de commentaire si tu est l'auteur du commentaire*/}
+                        {!deleteComment && (
+                          <button
+                            onClick={() =>
+                              handleDeleteComment(post.id, commentId, post.type)
+                            }
+                            className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded mt-2 ml-2"
+                          >
+                            Delete Comment
+                          </button>
+                        )}
+                      </div>
                       <p className="text-gray-300">
                         {post.comments[commentId].text}
                       </p>
-
-                      {/* Bouton de suppression de commentaire si tu est le proprietaire du commentaire*/}
-                      {user?.uid === post.comments[commentId]?.userId && (
-                        <button
-                          onClick={() =>
-                            handleDeleteComment(post.id, commentId, post.type)
-                          }
-                          className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded mt-2"
-                        >
-                          Delete Comment
-                        </button>
-                      )}
 
                       {/* Répondre à un commentaire */}
                       <div className="flex items-center space-x-2 sm:space-x-4 mt-4">
