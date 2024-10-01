@@ -18,7 +18,8 @@ function ReadPost({ user }) {
   const [likes, setLikes] = useState({});
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
-  const [deleteComment, setDeleteComment] = useState(false);
+  // const [deleteComment, setDeleteComment] = useState(false);
+  const [isExpanded, setIsExpanded] = useState({});
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -178,6 +179,13 @@ function ReadPost({ user }) {
       .catch((error) => console.error("Error deleting comment:", error));
   };
 
+  const toggleReadMore = (postId) => {
+    setIsExpanded((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 rounded-lg shadow-lg w-full max-w-4xl">
@@ -189,19 +197,37 @@ function ReadPost({ user }) {
               key={post.id}
               className="post-item w-full bg-gray-800 p-6 mb-6 rounded-lg shadow-md"
             >
-              {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post */}
-              <div className="flex items-center mb-4">
+              {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post avec la description du post*/}
+              <div className="flex flex-col mb-4">
                 {post.userProfilePhoto && (
-                  <img
-                    src={post.userProfilePhoto}
-                    alt={post.userName}
-                    className="w-8 h-8 rounded-full mr-2"
-                  />
+                  <div className="flex  mb-4">
+                    <img
+                      src={post.userProfilePhoto}
+                      alt={post.userName}
+                      className="w-8 h-8 rounded-full mr-2"
+                    />
+                    <span>{post.userName}</span>
+                  </div>
                 )}
-                <p className="text-white font-semibold">{post.userName}</p>
+
+                <p className="mb-4 text-white text-center items-center break-words">
+                  {isExpanded[post.id] || post.description.length <= 100
+                    ? post.description
+                    : `${post.description.slice(0, 100)}...`}
+                  {post.description.length > 100 && (
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={() => toggleReadMore(post.id)}
+                    >
+                      {isExpanded[post.id] ? " Read less" : "Read more"}
+                    </span>
+                  )}
+                </p>
               </div>
 
-              <p className="mb-4 text-white text-center">{post.description}</p>
+              {/* <p className="mb-4 text-white w-3/5 text-center">
+                {post.description}
+              </p>*/}
 
               {/* Afficher le contenu selon le type */}
               {post.type === "text" && <p className="mb-4">{post.content}</p>}
@@ -237,7 +263,7 @@ function ReadPost({ user }) {
               {user?.uid === post.userId && (
                 <button
                   onClick={() => handleDeletePost(post.id, post.type)}
-                  className="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded mb-4"
+                  className="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded mb-4 ml-4"
                 >
                   Delete Post
                 </button>
