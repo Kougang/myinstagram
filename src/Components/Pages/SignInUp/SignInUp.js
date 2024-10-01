@@ -168,21 +168,31 @@ function SignInUp({ user }) {
           />
 
           <label className="text-slate-900">Password</label>
-          <div>
+          <div className="xs:flex ">
             <input
               type={showPassword ? "text" : "password"}
               onChange={handlePasswordChange}
               name="password"
-              className="h-10 border border-slate-900 rounded p-4"
+              className="h-10 w-auto border border-slate-900 rounded p-4"
               required
             />
 
             {showPassword ? (
-              <span role="img" aria-label="Hide password" onClick={handleEyes}>
+              <span
+                role="img"
+                aria-label="Hide password"
+                onClick={handleEyes}
+                className="xs:mt-2"
+              >
                 👁️
               </span>
             ) : (
-              <span role="img" aria-label="Show password" onClick={handleEyes}>
+              <span
+                role="img"
+                aria-label="Show password"
+                onClick={handleEyes}
+                className="xs:mt-2"
+              >
                 👁️‍🗨️
               </span>
             )}
