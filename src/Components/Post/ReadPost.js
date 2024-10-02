@@ -20,6 +20,7 @@ function ReadPost({ user }) {
   const [uProfilePhoto, setUProfilePhoto] = useState("");
   // const [deleteComment, setDeleteComment] = useState(false);
   const [isExpanded, setIsExpanded] = useState({});
+  const [stickers, setStickers] = useState({});
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -186,6 +187,26 @@ function ReadPost({ user }) {
     }));
   };
 
+  const handleStickerLike = (postId, postType, stickerType) => {
+    const db = getDatabase(app);
+    const stickerRef = ref(
+      db,
+      `posts/${postType}/${postId}/stickers/${stickerType}`
+    );
+
+    update(stickerRef, {
+      count: (stickers[postId]?.[stickerType] || 0) + 1,
+    });
+
+    setStickers((prevStickers) => ({
+      ...prevStickers,
+      [postId]: {
+        ...prevStickers[postId],
+        [stickerType]: (prevStickers[postId]?.[stickerType] || 0) + 1,
+      },
+    }));
+  };
+
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 rounded-lg shadow-lg w-full max-w-4xl">
@@ -268,6 +289,58 @@ function ReadPost({ user }) {
                   Delete Post
                 </button>
               )}
+
+              {/*like*/}
+              <ul className="flex space-x-2">
+                {/* Sticker Like */}
+                <li>
+                  <button
+                    onClick={() =>
+                      handleStickerLike(post.id, post.type, "thumbsUp")
+                    }
+                  >
+                    <i className="fi fi-sr-thumbs-up text-blue-500"></i>
+                    {stickers[post.id]?.thumbsUp ||
+                      post.stickers?.thumbsUp?.count ||
+                      0}
+                  </button>
+                </li>
+                {/* Sticker Heart */}
+                <li>
+                  <button
+                    onClick={() =>
+                      handleStickerLike(post.id, post.type, "heart")
+                    }
+                  >
+                    <i className="fi fi-rr-face-smile-hearts text-pink-500"></i>
+                    {stickers[post.id]?.heart ||
+                      post.stickers?.heart?.count ||
+                      0}
+                  </button>
+                </li>
+                {/* Sticker Smile */}
+                <li>
+                  <button
+                    onClick={() =>
+                      handleStickerLike(post.id, post.type, "smile")
+                    }
+                  >
+                    <i className="fi fi-rr-grin-alt text-yellow-500"></i>
+                    {stickers[post.id]?.smile ||
+                      post.stickers?.smile?.count ||
+                      0}
+                  </button>
+                </li>
+                {/* Sticker Sad */}
+                <li>
+                  <button
+                    onClick={() => handleStickerLike(post.id, post.type, "sad")}
+                  >
+                    <i className="fi fi-rs-face-smiling-hands text-yellow-500"></i>
+                    {stickers[post.id]?.sad || post.stickers?.sad?.count || 0}
+                  </button>
+                </li>
+              </ul>
 
               {/* Zone de commentaires */}
               <div className="bg-gray-700 p-4 rounded-lg space-y-4">

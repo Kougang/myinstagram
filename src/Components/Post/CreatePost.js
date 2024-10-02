@@ -53,6 +53,12 @@ function CreatePost({ user }) {
       timestamp: Date.now(),
       userName: user?.displayName, // Ajout du nom d'utilisateur
       userProfilePhoto: user?.photoURL, // Ajout de la photo de profil de l'utilisateur
+      stickers: {
+        thumbsUp: { count: 3 },
+        heart: { count: 5 },
+        smile: { count: 2 },
+        sad: { count: 0 },
+      },
     });
     setDescription("");
     alert("Post created successfully!");
