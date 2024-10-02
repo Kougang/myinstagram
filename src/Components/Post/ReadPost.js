@@ -9,7 +9,8 @@ import {
   push,
   remove,
 } from "firebase/database";
-import { v4 as uuidv4 } from "uuid"; // Assurez-vous d'importer uuid
+import { v4 as uuidv4 } from "uuid";
+import handleStickerLike from "./handleStickerLike";
 
 function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
@@ -195,16 +196,6 @@ function ReadPost({ user }) {
       db,
       `posts/${postType}/${postId}/stickers/${stickerType}`
     );
-
-    // onValue(stickerRef, (stickersSnapshot) => {
-    //   if (stickersSnapshot.exists()) {
-    //     const stickersData = stickersSnapshot.val();
-    //     setStickers((prevStickers) => ({
-    //       ...prevStickers,
-    //       [postId]: stickersData,
-    //     }));
-    //   }
-    // });
 
     const l = update(stickerRef, {
       count: (stickers[postId]?.[stickerType] || 0) + 1,
