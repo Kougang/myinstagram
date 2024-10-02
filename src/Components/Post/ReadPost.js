@@ -98,7 +98,9 @@ function ReadPost({ user }) {
       return prevPosts.map((post) => {
         if (post.id === postId) {
           const updatedComments = { ...post.comments };
-          if (!updatedComments) updatedComments = {};
+          {
+            /*if (!updatedComments) updatedComments = {};*/
+          }
           if (parentCommentId) {
             if (!updatedComments[parentCommentId].replies) {
               updatedComments[parentCommentId].replies = {};
@@ -194,6 +196,16 @@ function ReadPost({ user }) {
       `posts/${postType}/${postId}/stickers/${stickerType}`
     );
 
+    // onValue(stickerRef, (stickersSnapshot) => {
+    //   if (stickersSnapshot.exists()) {
+    //     const stickersData = stickersSnapshot.val();
+    //     setStickers((prevStickers) => ({
+    //       ...prevStickers,
+    //       [postId]: stickersData,
+    //     }));
+    //   }
+    // });
+
     update(stickerRef, {
       count: (stickers[postId]?.[stickerType] || 0) + 1,
     });
@@ -246,10 +258,6 @@ function ReadPost({ user }) {
                 </p>
               </div>
 
-              {/* <p className="mb-4 text-white w-3/5 text-center">
-                {post.description}
-              </p>*/}
-
               {/* Afficher le contenu selon le type */}
               {post.type === "text" && <p className="mb-4">{post.content}</p>}
               {post.type === "image" && (
@@ -290,7 +298,8 @@ function ReadPost({ user }) {
                 </button>
               )}
 
-              {/*like*/}
+              {/*like stiker*/}
+
               <ul className="flex space-x-2">
                 {/* Sticker Like */}
                 <li>
@@ -299,7 +308,7 @@ function ReadPost({ user }) {
                       handleStickerLike(post.id, post.type, "thumbsUp")
                     }
                   >
-                    <i className="fi fi-sr-thumbs-up text-blue-500"></i>
+                    <span>👍</span>
                     {stickers[post.id]?.thumbsUp ||
                       post.stickers?.thumbsUp?.count ||
                       0}
@@ -312,7 +321,7 @@ function ReadPost({ user }) {
                       handleStickerLike(post.id, post.type, "heart")
                     }
                   >
-                    <i className="fi fi-rr-face-smile-hearts text-pink-500"></i>
+                    <span>❤️</span>
                     {stickers[post.id]?.heart ||
                       post.stickers?.heart?.count ||
                       0}
@@ -325,7 +334,7 @@ function ReadPost({ user }) {
                       handleStickerLike(post.id, post.type, "smile")
                     }
                   >
-                    <i className="fi fi-rr-grin-alt text-yellow-500"></i>
+                    <span>😊</span>
                     {stickers[post.id]?.smile ||
                       post.stickers?.smile?.count ||
                       0}
@@ -336,7 +345,7 @@ function ReadPost({ user }) {
                   <button
                     onClick={() => handleStickerLike(post.id, post.type, "sad")}
                   >
-                    <i className="fi fi-rs-face-smiling-hands text-yellow-500"></i>
+                    <span>😢</span>
                     {stickers[post.id]?.sad || post.stickers?.sad?.count || 0}
                   </button>
                 </li>
