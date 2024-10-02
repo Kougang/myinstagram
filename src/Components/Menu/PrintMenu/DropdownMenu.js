@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase/firebaseConfig";
+// import { Navigate } from "react-router-dom";
+// import { signOut } from "firebase/auth";
+// import { auth } from "../../../firebase/firebaseConfig";
 import ToggleButton from "./ToggleButton";
 import DropdownList from "./DropdownList";
-import SignInUp from "../../Pages/SignInUp/SignInUp";
+// import SignInUp from "../../Pages/SignInUp/SignInUp";
 
 function DropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,9 +18,16 @@ function DropdownMenu() {
   };
 
   return (
-    <div className="relative">
-      <ToggleButton toggleMenu={toggleMenu} />
-      {isOpen && <DropdownList closeMenu={closeMenu} />}
+    <div className="mr-3">
+      <div className="ml-40">
+        <ToggleButton toggleMenu={toggleMenu} />
+      </div>
+
+      {isOpen && (
+        <div className="ml-2">
+          <DropdownList closeMenu={closeMenu} />
+        </div>
+      )}
     </div>
   );
 }

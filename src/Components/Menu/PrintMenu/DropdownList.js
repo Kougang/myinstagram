@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 function DropdownList({ closeMenu, handleSignOut }) {
   return (
-    <div className=" w-2/5 fixed  right-10  ">
-      <div className="fixed  top-20 mt-10 w-40 bg-white border border-gray-300 rounded shadow-lg z-50">
+    <div className=" absolute ">
+      <div className="  top-0 mt-0 w-40 bg-white border border-gray-300 rounded shadow-lg ">
         <ul className="py-1">
           <li>
             <Link

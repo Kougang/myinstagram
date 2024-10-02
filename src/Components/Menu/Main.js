@@ -5,7 +5,7 @@ import Contact from "./Contact";
 import About from "./About";
 import Bibliographie from "./Bibliographie";
 import UserProfile from "../Pages/UserProfil/UserProfile";
-import LockOut from "../Pages/LockOut/LockOut";
+// import LockOut from "../Pages/LockOut/LockOut";
 import DropdownMenu from "./PrintMenu/DropdownMenu";
 // import SignInUp from "../Pages/SignInUp/SignInUp";
 

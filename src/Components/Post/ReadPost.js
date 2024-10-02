@@ -18,7 +18,7 @@ function ReadPost({ user }) {
   const [likes, setLikes] = useState({});
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
-  // const [deleteComment, setDeleteComment] = useState(false);
+  const [like, setLike] = useState(0);
   const [isExpanded, setIsExpanded] = useState({});
   const [stickers, setStickers] = useState({});
 
@@ -206,10 +206,12 @@ function ReadPost({ user }) {
     //   }
     // });
 
-    update(stickerRef, {
+    const l = update(stickerRef, {
       count: (stickers[postId]?.[stickerType] || 0) + 1,
     });
+    setLike(l);
 
+    // console.log("console contenu", l);
     setStickers((prevStickers) => ({
       ...prevStickers,
       [postId]: {
