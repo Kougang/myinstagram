@@ -1,6 +1,6 @@
 import React from "react";
 import PrintPhoto from "../Pages/UserProfil/PrintPhoto";
-import Main from "../Menu/Main";
+import DropdownMenu from "../Menu/PrintMenu/DropdownMenu";
 
 function Header({ user }) {
   return (
@@ -18,9 +18,10 @@ function Header({ user }) {
         <div className="flex-grow ">
           <PrintPhoto />
         </div>
-        <div className="">
-          <Main user={user} />
-        </div>
+
+        <nav className="">
+          <DropdownMenu />
+        </nav>
       </div>
     </div>
   );

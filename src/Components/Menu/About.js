@@ -4,7 +4,7 @@ import Footer from "../Home/Footer";
 
 function About() {
   return (
-    <div className=" min-h-screen flex items-center justify-center  bg-gray-800">
+    <div className=" absolute min-h-screen flex items-center justify-center  bg-gray-800">
       <main className=" h-full bg-blue-500 text-white flex flex-col w-full md:w-2/5  ">
         <div className="">
           <Header />

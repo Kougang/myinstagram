@@ -6,16 +6,16 @@ import About from "./About";
 import Bibliographie from "./Bibliographie";
 import UserProfile from "../Pages/UserProfil/UserProfile";
 // import LockOut from "../Pages/LockOut/LockOut";
-import DropdownMenu from "./PrintMenu/DropdownMenu";
+//import DropdownMenu from "./PrintMenu/DropdownMenu";
 // import SignInUp from "../Pages/SignInUp/SignInUp";
 
 function Main() {
   return (
-    <div className="">
-      {/* Menu en haut à droite */}
+    <div className=" ">
+      {/* Menu en haut à droite 
       <div className="">
         <DropdownMenu />
-      </div>
+      </div>*/}
 
       {/* Routes pour chaque composant */}
 

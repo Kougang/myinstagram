@@ -51,6 +51,7 @@ function App() {
             }
           />
           <Route
+            className="flex flex-none"
             path="/Main/*"
             element={
               <ProtectedRoute user={user}>
