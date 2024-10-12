@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import app from "./../../firebase/firebaseConfig";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  update,
-  push,
-  remove,
-} from "firebase/database";
+import { getDatabase, ref, onValue, push, remove } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import HandleStickerLike from "./HandleStickerLike";
+import HandleLike from "./HandleLike";
 
 function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
@@ -19,7 +13,6 @@ function ReadPost({ user }) {
   const [likes, setLikes] = useState({});
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
-  // const [like, setLike] = useState(0);
   const [isExpanded, setIsExpanded] = useState({});
   const [stickers, setStickers] = useState({});
 
@@ -53,20 +46,6 @@ function ReadPost({ user }) {
       });
     });
   }, []);
-
-  const handleLike = (postId, postType) => {
-    const db = getDatabase(app);
-    const postRef = ref(db, `posts/${postType}/${postId}/likes`);
-
-    update(postRef, {
-      likes: (likes[postId] || 0) + 1,
-    });
-
-    setLikes((prevLikes) => ({
-      ...prevLikes,
-      [postId]: (prevLikes[postId] || 0) + 1,
-    }));
-  };
 
   const handleCommentSubmit = (postId, postType, parentCommentId = null) => {
     const db = getDatabase(app);
@@ -188,28 +167,6 @@ function ReadPost({ user }) {
     }));
   };
 
-  // const handleStickerLike = (postId, postType, stickerType) => {
-  //   const db = getDatabase(app);
-  //   const stickerRef = ref(
-  //     db,
-  //     `posts/${postType}/${postId}/stickers/${stickerType}`
-  //   );
-
-  //   const l = update(stickerRef, {
-  //     count: (stickers[postId]?.[stickerType] || 0) + 1,
-  //   });
-  //   setLike(l);
-
-  //   // console.log("console contenu", l);
-  //   setStickers((prevStickers) => ({
-  //     ...prevStickers,
-  //     [postId]: {
-  //       ...prevStickers[postId],
-  //       [stickerType]: (prevStickers[postId]?.[stickerType] || 0) + 1,
-  //     },
-  //   }));
-  // };
-
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 rounded-lg shadow-lg w-full max-w-4xl">
@@ -272,12 +229,12 @@ function ReadPost({ user }) {
               )}
 
               {/* Bouton de like */}
-              <button
-                onClick={() => handleLike(post.id, post.type)}
-                className="bg-blue-700 hover:bg-blue-600 text-white py-2 px-4 rounded mb-4"
-              >
-                Like: {likes[post.id] || post.likes?.likes || 0}
-              </button>
+              <HandleLike
+                postId={post.id}
+                postType={post.type}
+                likes={likes}
+                setLikes={setLikes}
+              />
 
               {/* Bouton de suppression du post, visible uniquement si l'utilisateur est le propriétaire */}
               {user?.uid === post.userId && (
