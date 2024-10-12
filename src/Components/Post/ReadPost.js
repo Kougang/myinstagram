@@ -10,7 +10,7 @@ import {
   remove,
 } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
-import handleStickerLike from "./handleStickerLike";
+import HandleStickerLike from "./HandleStickerLike";
 
 function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
@@ -19,7 +19,7 @@ function ReadPost({ user }) {
   const [likes, setLikes] = useState({});
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
-  const [like, setLike] = useState(0);
+  // const [like, setLike] = useState(0);
   const [isExpanded, setIsExpanded] = useState({});
   const [stickers, setStickers] = useState({});
 
@@ -99,9 +99,7 @@ function ReadPost({ user }) {
       return prevPosts.map((post) => {
         if (post.id === postId) {
           const updatedComments = { ...post.comments };
-          {
-            /*if (!updatedComments) updatedComments = {};*/
-          }
+
           if (parentCommentId) {
             if (!updatedComments[parentCommentId].replies) {
               updatedComments[parentCommentId].replies = {};
@@ -190,27 +188,27 @@ function ReadPost({ user }) {
     }));
   };
 
-  const handleStickerLike = (postId, postType, stickerType) => {
-    const db = getDatabase(app);
-    const stickerRef = ref(
-      db,
-      `posts/${postType}/${postId}/stickers/${stickerType}`
-    );
+  // const handleStickerLike = (postId, postType, stickerType) => {
+  //   const db = getDatabase(app);
+  //   const stickerRef = ref(
+  //     db,
+  //     `posts/${postType}/${postId}/stickers/${stickerType}`
+  //   );
 
-    const l = update(stickerRef, {
-      count: (stickers[postId]?.[stickerType] || 0) + 1,
-    });
-    setLike(l);
+  //   const l = update(stickerRef, {
+  //     count: (stickers[postId]?.[stickerType] || 0) + 1,
+  //   });
+  //   setLike(l);
 
-    // console.log("console contenu", l);
-    setStickers((prevStickers) => ({
-      ...prevStickers,
-      [postId]: {
-        ...prevStickers[postId],
-        [stickerType]: (prevStickers[postId]?.[stickerType] || 0) + 1,
-      },
-    }));
-  };
+  //   // console.log("console contenu", l);
+  //   setStickers((prevStickers) => ({
+  //     ...prevStickers,
+  //     [postId]: {
+  //       ...prevStickers[postId],
+  //       [stickerType]: (prevStickers[postId]?.[stickerType] || 0) + 1,
+  //     },
+  //   }));
+  // };
 
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
@@ -293,56 +291,12 @@ function ReadPost({ user }) {
 
               {/*like stiker*/}
 
-              <ul className="flex space-x-2">
-                {/* Sticker Like */}
-                <li>
-                  <button
-                    onClick={() =>
-                      handleStickerLike(post.id, post.type, "thumbsUp")
-                    }
-                  >
-                    <span>👍</span>
-                    {stickers[post.id]?.thumbsUp ||
-                      post.stickers?.thumbsUp?.count ||
-                      0}
-                  </button>
-                </li>
-                {/* Sticker Heart */}
-                <li>
-                  <button
-                    onClick={() =>
-                      handleStickerLike(post.id, post.type, "heart")
-                    }
-                  >
-                    <span>❤️</span>
-                    {stickers[post.id]?.heart ||
-                      post.stickers?.heart?.count ||
-                      0}
-                  </button>
-                </li>
-                {/* Sticker Smile */}
-                <li>
-                  <button
-                    onClick={() =>
-                      handleStickerLike(post.id, post.type, "smile")
-                    }
-                  >
-                    <span>😊</span>
-                    {stickers[post.id]?.smile ||
-                      post.stickers?.smile?.count ||
-                      0}
-                  </button>
-                </li>
-                {/* Sticker Sad */}
-                <li>
-                  <button
-                    onClick={() => handleStickerLike(post.id, post.type, "sad")}
-                  >
-                    <span>😢</span>
-                    {stickers[post.id]?.sad || post.stickers?.sad?.count || 0}
-                  </button>
-                </li>
-              </ul>
+              <HandleStickerLike
+                postId={post.id}
+                postType={post.type}
+                stickers={stickers}
+                setStickers={setStickers}
+              />
 
               {/* Zone de commentaires */}
               <div className="bg-gray-700 p-4 rounded-lg space-y-4">
