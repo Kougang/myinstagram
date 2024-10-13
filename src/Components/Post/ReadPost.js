@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import app from "./../../firebase/firebaseConfig";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
-import { getDatabase, ref, onValue, push, remove } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  push,
+  remove,
+  update,
+} from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import HandleStickerLike from "./HandleStickerLike";
-import HandleLike from "./HandleLike";
+// import HandleLike from "./HandleLike";
 
 function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
@@ -15,6 +22,9 @@ function ReadPost({ user }) {
   const [uProfilePhoto, setUProfilePhoto] = useState("");
   const [isExpanded, setIsExpanded] = useState({});
   const [stickers, setStickers] = useState({});
+  const [totalLikes, setTotalLikes] = useState(0);
+
+  console.log("totalLikes", totalLikes);
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -167,6 +177,32 @@ function ReadPost({ user }) {
     }));
   };
 
+  // Fonction de callback pour recevoir la mise à jour du total des likes
+  const handleTotalLikesChange = (newTotalLikes) => {
+    setTotalLikes(newTotalLikes); // Mettre à jour le total des likes
+  };
+
+  const handleLike = (postType, postId) => {
+    const db = getDatabase(app);
+    const postRef = ref(db, `posts/${postType}/${postId}/likes`);
+
+    // Incrémenter le nombre de likes localement
+    setLikes((prevLikes) => {
+      const newLikes = totalLikes;
+
+      // Mettre à jour Firebase avec le nouveau nombre de likes
+      update(postRef, { likes: newLikes })
+        .then(() => {
+          console.log("Likes updated successfully!");
+        })
+        .catch((error) => {
+          console.error("Error updating likes:", error);
+        });
+
+      return newLikes; // Retourner le nouveau nombre de likes pour l'état local
+    });
+  };
+
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 rounded-lg shadow-lg w-full max-w-4xl">
@@ -228,13 +264,15 @@ function ReadPost({ user }) {
                 </audio>
               )}
 
-              {/* Bouton de like */}
+              {/* Bouton de like 
               <HandleLike
                 postId={post.id}
                 postType={post.type}
                 likes={likes}
                 setLikes={setLikes}
-              />
+                totalLikes={totalLikes}
+                handleLike={handleLike}
+              />*/}
 
               {/* Bouton de suppression du post, visible uniquement si l'utilisateur est le propriétaire */}
               {user?.uid === post.userId && (
@@ -253,6 +291,8 @@ function ReadPost({ user }) {
                 postType={post.type}
                 stickers={stickers}
                 setStickers={setStickers}
+                onTotalChange={handleTotalLikesChange}
+                handleLike={handleLike}
               />
 
               {/* Zone de commentaires */}

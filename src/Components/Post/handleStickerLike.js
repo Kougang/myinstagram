@@ -1,7 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getDatabase, ref, update, onValue } from "firebase/database";
 
-function HandleStickerLike({ postId, postType, stickers, setStickers }) {
+function HandleStickerLike({
+  postId,
+  postType,
+  stickers,
+  setStickers,
+  onTotalChange,
+}) {
+  const [totalLikesTemp, settotalLikesTemp] = useState(0);
   useEffect(() => {
     const db = getDatabase();
     const stickerRef = ref(db, `posts/${postType}/${postId}/stickers`);
@@ -14,11 +21,22 @@ function HandleStickerLike({ postId, postType, stickers, setStickers }) {
           ...prevStickers,
           [postId]: data,
         }));
+
+        // Calculer la somme totale des likes des stickers
+        const totalLikes = Object.values(data || {}).reduce(
+          (sum, sticker) => sum + (sticker.count || 0),
+          0
+        );
+
+        // Appeler la fonction de rappel pour informer le composant parent
+        onTotalChange(totalLikes);
+        settotalLikesTemp(totalLikes);
       }
     });
   }, [postId, postType, setStickers]);
 
   const handleStickerLike = (stickerType) => {
+    // handleLike(postType, postId);
     const db = getDatabase();
     const stickerRef = ref(
       db,
@@ -31,13 +49,27 @@ function HandleStickerLike({ postId, postType, stickers, setStickers }) {
       count: currentCount,
     });
 
-    setStickers((prevStickers) => ({
-      ...prevStickers,
-      [postId]: {
-        ...prevStickers[postId],
-        [stickerType]: { count: currentCount },
-      },
-    }));
+    setStickers((prevStickers) => {
+      const updatedStickers = {
+        ...prevStickers,
+        [postId]: {
+          ...prevStickers[postId],
+          [stickerType]: { count: currentCount },
+        },
+      };
+
+      // Calculer la nouvelle somme totale des likes
+      const newTotalLikes = Object.values(updatedStickers[postId] || {}).reduce(
+        (sum, sticker) => sum + (sticker.count || 0),
+        0
+      );
+
+      // Appeler la fonction de rappel pour mettre à jour le total
+      onTotalChange(newTotalLikes);
+      settotalLikesTemp(newTotalLikes);
+
+      return updatedStickers;
+    });
   };
 
   return (
@@ -65,6 +97,11 @@ function HandleStickerLike({ postId, postType, stickers, setStickers }) {
           <span>😢</span>
           {stickers[postId]?.sad?.count || 0}
         </button>
+      </li>
+      <li>
+        <span className="border-2 border-blue-500 rounded">
+          {totalLikesTemp}
+        </span>
       </li>
     </ul>
   );
