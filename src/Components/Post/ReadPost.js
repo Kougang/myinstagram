@@ -11,7 +11,7 @@ import {
 } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import HandleStickerLike from "./HandleStickerLike";
-// import HandleLike from "./HandleLike";
+import handleDeleteComment from "./handleDeleteComment";
 
 function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
@@ -74,14 +74,17 @@ function ReadPost({ user }) {
     setUName(user?.displayName);
     setUProfilePhoto(user?.photoURL);
 
-    push(commentRef, {
+    const newCommentData = {
       id: newCommentId,
       text: commentText,
       createdAt: new Date().toISOString(),
       userId: user?.uid,
       userName: user?.displayName,
       userProfilePhoto: user?.photoURL,
-    });
+    };
+
+    // Ajouter le commentaire dans Firebase
+    push(commentRef, newCommentData);
 
     // Mettre à jour l'état local pour afficher immédiatement le commentaire ou la réponse
     setPosts((prevPosts) => {
@@ -94,10 +97,13 @@ function ReadPost({ user }) {
               updatedComments[parentCommentId].replies = {};
             }
             updatedComments[parentCommentId].replies[newCommentId] = {
-              text: commentText,
+              ...newCommentData,
             };
           } else {
-            updatedComments[newCommentId] = { text: commentText, replies: {} };
+            updatedComments[newCommentId] = {
+              ...newCommentData,
+              replies: {},
+            };
           }
           return { ...post, comments: updatedComments };
         }
@@ -182,27 +188,6 @@ function ReadPost({ user }) {
     setTotalLikes(newTotalLikes); // Mettre à jour le total des likes
   };
 
-  const handleLike = (postType, postId) => {
-    const db = getDatabase(app);
-    const postRef = ref(db, `posts/${postType}/${postId}/likes`);
-
-    // Incrémenter le nombre de likes localement
-    setLikes((prevLikes) => {
-      const newLikes = totalLikes;
-
-      // Mettre à jour Firebase avec le nouveau nombre de likes
-      update(postRef, { likes: newLikes })
-        .then(() => {
-          console.log("Likes updated successfully!");
-        })
-        .catch((error) => {
-          console.error("Error updating likes:", error);
-        });
-
-      return newLikes; // Retourner le nouveau nombre de likes pour l'état local
-    });
-  };
-
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 rounded-lg shadow-lg w-full max-w-4xl">
@@ -264,16 +249,6 @@ function ReadPost({ user }) {
                 </audio>
               )}
 
-              {/* Bouton de like 
-              <HandleLike
-                postId={post.id}
-                postType={post.type}
-                likes={likes}
-                setLikes={setLikes}
-                totalLikes={totalLikes}
-                handleLike={handleLike}
-              />*/}
-
               {/* Bouton de suppression du post, visible uniquement si l'utilisateur est le propriétaire */}
               {user?.uid === post.userId && (
                 <button
@@ -292,7 +267,6 @@ function ReadPost({ user }) {
                 stickers={stickers}
                 setStickers={setStickers}
                 onTotalChange={handleTotalLikesChange}
-                handleLike={handleLike}
               />
 
               {/* Zone de commentaires */}
@@ -336,7 +310,12 @@ function ReadPost({ user }) {
                         {post.comments[commentId]?.userId === user?.uid && (
                           <button
                             onClick={() =>
-                              handleDeleteComment(post.id, commentId, post.type)
+                              handleDeleteComment(
+                                post.id,
+                                commentId,
+                                post.type,
+                                setPosts
+                              )
                             }
                             className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded mt-2 ml-2"
                           >
