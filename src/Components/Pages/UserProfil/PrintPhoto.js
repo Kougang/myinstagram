@@ -29,8 +29,11 @@ function PrintPhoto() {
             <span className="text-lg font-semibold">{displayName}</span>
           </div>
         ) : (
-          <div className="w-24 h-24 rounded-full border-2 border-gray-300 flex items-center justify-center bg-gray-200 ">
-            <span className="text-gray-600">No Photo</span>
+          <div className="flex ">
+            <div className="flex   w-24 h-24 rounded-full border-2 border-gray-300  items-center justify-center bg-gray-200 ">
+              <span className="text-gray-600 ">No Photo</span>
+            </div>
+            <span className="text-lg font-semibold pt-10">{displayName}</span>
           </div>
         )}
       </div>

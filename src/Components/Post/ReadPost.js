@@ -201,13 +201,18 @@ function ReadPost({ user }) {
             >
               {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post avec la description du post*/}
               <div className="flex flex-col mb-4">
-                {post.userProfilePhoto && (
+                {post.userProfilePhoto ? (
                   <div className="flex  mb-4">
                     <img
                       src={post.userProfilePhoto}
                       alt={post.userName}
                       className="w-8 h-8 rounded-full mr-2"
                     />
+                    <span>{post.userName}</span>
+                  </div>
+                ) : (
+                  <div className="flex  mb-4">
+                    <img className="w-8 h-8 rounded-full mr-2" />
                     <span>{post.userName}</span>
                   </div>
                 )}
