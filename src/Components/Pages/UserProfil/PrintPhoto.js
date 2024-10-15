@@ -4,16 +4,14 @@ import app from "./../../../firebase/firebaseConfig";
 
 function PrintPhoto() {
   const auth = getAuth(app);
-  const user = auth.currentUser; // L'utilisateur connecté
+  const user = auth.currentUser;
   const [photoURL, setPhotoURL] = useState("");
-  const [displayName, setDisplayName] = useState(""); // Nouvel état pour le nom d'utilisateur
+  const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
     if (user) {
-      // Récupérer l'URL de la photo de profil
-      setPhotoURL(user.photoURL || ""); // Photo par défaut si aucune photo n'est définie
-      // Récupérer le nom de l'utilisateur
-      setDisplayName(user.displayName || "Utilisateur"); // Afficher "Utilisateur" si aucun nom n'est défini
+      setPhotoURL(user.photoURL || "");
+      setDisplayName(user.displayName || "Utilisateur");
     }
   }, [user]);
 
@@ -36,8 +34,6 @@ function PrintPhoto() {
           </div>
         )}
       </div>
-      {/* Afficher le nom de l'utilisateur 
-      <div className="mt-2 text-lg font-semibold">{displayName}</div>*/}
     </div>
   );
 }

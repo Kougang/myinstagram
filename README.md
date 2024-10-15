@@ -63,6 +63,7 @@ After log in successfuly user can
 - **Readpost**,
 - **Like post(with stickers)**,
 - **Count sticker liked**,
+- **User can make only one like for each post**
 - **Delete post if he's the author**,
 - **comment post**,
 - **Delete comment if he's the author**,

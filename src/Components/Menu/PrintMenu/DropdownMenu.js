@@ -18,12 +18,12 @@ function DropdownMenu() {
 
   return (
     <div className="mr-3">
-      <div className="ml-40 xs:ml-0">
+      <div className="ml-40 xs:ml-0 ">
         <ToggleButton toggleMenu={toggleMenu} />
       </div>
 
       {isOpen && (
-        <div className="ml-2">
+        <div className="ml-2  xs:-ml-40">
           <DropdownList closeMenu={closeMenu} />
         </div>
       )}
