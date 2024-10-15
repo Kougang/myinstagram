@@ -18,7 +18,7 @@ function DropdownMenu() {
 
   return (
     <div className="mr-3">
-      <div className="ml-40">
+      <div className="ml-40 xs:ml-0">
         <ToggleButton toggleMenu={toggleMenu} />
       </div>
 

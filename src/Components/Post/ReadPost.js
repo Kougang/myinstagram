@@ -190,14 +190,14 @@ function ReadPost({ user }) {
 
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
-      <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-2 rounded-lg shadow-lg w-full max-w-4xl">
+      <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-3 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 className="text-3xl font-bold">Posts</h1>
 
         {posts.length > 0 ? (
           posts.map((post) => (
             <div
               key={post.id}
-              className="post-item w-full bg-gray-500 p-6 xs:p-2 mb-6 rounded-lg shadow-md"
+              className="post-item w-full bg-gray-500 p-6 xs:p-3 mb-6 rounded-lg shadow-md"
             >
               {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post avec la description du post*/}
               <div className="flex flex-col mb-4">
@@ -267,10 +267,11 @@ function ReadPost({ user }) {
                 stickers={stickers}
                 setStickers={setStickers}
                 onTotalChange={handleTotalLikesChange}
+                userID={user?.uid}
               />
 
               {/* Zone de commentaires */}
-              <div className="bg-gray-700 p-4  rounded-lg space-y-2 xs:p-1">
+              <div className="bg-gray-700 p-4  rounded-lg space-y-2 xs:p-2">
                 <h3 className="text-xl font-semibold">Comments</h3>
 
                 {post.comments ? (
@@ -381,7 +382,7 @@ function ReadPost({ user }) {
                   />
                   <button
                     onClick={() => handleCommentSubmit(post.id, post.type)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white py-1 px-2 sm:py-2 xs:px-0 xs:pl-1  text-xs sm:text-sm rounded rounded"
+                    className="bg-blue-600 hover:bg-blue-500 text-white py-1 px-2 sm:py-2 xs:px-1 xs:pl-1  text-xs sm:text-sm rounded rounded"
                   >
                     <PaperAirplaneIcon className="w-5 h-4 text-white transform  rotate-45" />
                   </button>

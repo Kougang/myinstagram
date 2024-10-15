@@ -22,11 +22,11 @@ function PrintPhoto() {
       <div className="">
         {/* Afficher l'image dans un cercle */}
         {photoURL ? (
-          <div className="flex items-center space-x-4 right-2">
+          <div className="flex items-center space-x-0 right-2">
             <img
               src={photoURL}
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+              className="w-24 h-24 rounded-full object-cover border-2 border-gray-300 "
             />
             <span className="text-lg font-semibold">{displayName}</span>
           </div>

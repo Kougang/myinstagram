@@ -7,8 +7,11 @@ function HandleStickerLike({
   stickers,
   setStickers,
   onTotalChange,
+  userID,
 }) {
   const [totalLikesTemp, settotalLikesTemp] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+
   useEffect(() => {
     const db = getDatabase();
     const stickerRef = ref(db, `posts/${postType}/${postId}/stickers`);
@@ -36,65 +39,94 @@ function HandleStickerLike({
   }, [postId, postType, setStickers]);
 
   const handleStickerLike = (stickerType) => {
-    // handleLike(postType, postId);
+    const userId = userID; // Supposons que l'ID de l'utilisateur est stocké dans user
+
+    if (!userId || hasLiked) return; // S'assurer que l'utilisateur est connecté
+
     const db = getDatabase();
-    const stickerRef = ref(
+    const stickerUserRef = ref(
       db,
-      `posts/${postType}/${postId}/stickers/${stickerType}`
+      `posts/${postType}/${postId}/stickers/${stickerType}/users/${userId}`
     );
 
-    // Incrémenter le nombre de likes dans Firebase et localement
-    const currentCount = (stickers[postId]?.[stickerType]?.count || 0) + 1;
-    update(stickerRef, {
-      count: currentCount,
-    });
+    // Vérifier si l'utilisateur a déjà liké ce sticker
+    onValue(
+      stickerUserRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          // L'utilisateur a déjà liké, ne rien faire
+          console.log("User has already liked this sticker.");
+        } else {
+          // Incrémenter le nombre de likes dans Firebase et localement
+          const currentCount =
+            (stickers[postId]?.[stickerType]?.count || 0) + 1;
+          const updates = {
+            count: currentCount,
+          };
 
-    setStickers((prevStickers) => {
-      const updatedStickers = {
-        ...prevStickers,
-        [postId]: {
-          ...prevStickers[postId],
-          [stickerType]: { count: currentCount },
-        },
-      };
+          updates[`users/${userId}`] = true; // Ajouter l'utilisateur à la liste des utilisateurs qui ont liké
 
-      // Calculer la nouvelle somme totale des likes
-      const newTotalLikes = Object.values(updatedStickers[postId] || {}).reduce(
-        (sum, sticker) => sum + (sticker.count || 0),
-        0
-      );
+          // Mettre à jour le nombre de likes et l'utilisateur dans la base de données
+          update(
+            ref(db, `posts/${postType}/${postId}/stickers/${stickerType}`),
+            updates
+          );
 
-      // Appeler la fonction de rappel pour mettre à jour le total
-      onTotalChange(newTotalLikes);
-      settotalLikesTemp(newTotalLikes);
+          setStickers((prevStickers) => {
+            const updatedStickers = {
+              ...prevStickers,
+              [postId]: {
+                ...prevStickers[postId],
+                [stickerType]: {
+                  count: currentCount,
+                  users: {
+                    ...prevStickers[postId]?.[stickerType]?.users,
+                    [userId]: true,
+                  },
+                },
+              },
+            };
 
-      return updatedStickers;
-    });
+            // Calculer la nouvelle somme totale des likes
+            const newTotalLikes = Object.values(
+              updatedStickers[postId] || {}
+            ).reduce((sum, sticker) => sum + (sticker.count || 0), 0);
+
+            onTotalChange(newTotalLikes);
+            settotalLikesTemp(newTotalLikes);
+
+            return updatedStickers;
+          });
+          setHasLiked(true);
+        }
+      },
+      { onlyOnce: true }
+    );
   };
-
+  // disabled={hasLiked}
   return (
     <ul className="flex space-x-2">
       <li>
         <button onClick={() => handleStickerLike("thumbsUp")}>
-          <span>👍</span>
+          <span className="bg-gray-500">👍</span>
           {stickers[postId]?.thumbsUp?.count || 0}
         </button>
       </li>
       <li>
         <button onClick={() => handleStickerLike("heart")}>
-          <span>❤️</span>
+          <span className="bg-gray-500">❤️</span>
           {stickers[postId]?.heart?.count || 0}
         </button>
       </li>
       <li>
         <button onClick={() => handleStickerLike("smile")}>
-          <span>😊</span>
+          <span className="bg-gray-500">😊</span>
           {stickers[postId]?.smile?.count || 0}
         </button>
       </li>
       <li>
         <button onClick={() => handleStickerLike("sad")}>
-          <span>😢</span>
+          <span className="bg-gray-500">😢</span>
           {stickers[postId]?.sad?.count || 0}
         </button>
       </li>
