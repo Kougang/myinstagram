@@ -42,10 +42,39 @@ suite---
 
 ## Usage
 
-To run the project:
+To start the project, make sure all dependencies are correctly installed, then run the command `npm start`. You will get the same result as shown on the following link, which contains the hosted version of our application: https://myinstagramdb-59f53.web.app. For styling in this application, we used **Tailwind CSS**.
 
-Ensure that all dependencies are installed and Amplify is properly configured.
+The available options are as follows:
+The user can
 
-Start the application:
-npm start or yarn start
-Access the application in your web browser at the provided URL.
+- **sign in**,
+- **sign up, verify the user name, block sign up if the user name exist**,
+- **change password "Settings > "**,
+- **change username "Settings > "**,
+- **upload profil picture "Settings > "**,
+- **change profil picture "Settings > "**,
+- **change account type("public default") or private**,
+- **You can see your name once you have uploaded your profile picture in Settings > Upload Profile Picture.**
+
+After log in successfuly user can
+
+- **Create post(image,video,audio,text)**,
+- **Add read more and red less option on post**,
+- **Readpost**,
+- **Like post(with stickers)**,
+- **Count sticker liked**,
+- **Delete post if he's the author**,
+- **comment post**,
+- **Delete comment if he's the author**,
+- **make the comment of comment on the post**
+
+pages
+
+- **Loading page**
+- **Home page**,
+- **Settings**,
+- **about**,
+- **contact**,
+- **bibliographie**
+
+- **Using Tailwind, we defined a breakpoint so the site is responsive on both mobile and desktop.**

@@ -190,14 +190,14 @@ function ReadPost({ user }) {
 
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
-      <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+      <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-2 rounded-lg shadow-lg w-full max-w-4xl">
         <h1 className="text-3xl font-bold">Posts</h1>
 
         {posts.length > 0 ? (
           posts.map((post) => (
             <div
               key={post.id}
-              className="post-item w-full bg-gray-800 p-6 mb-6 rounded-lg shadow-md"
+              className="post-item w-full bg-gray-500 p-6 xs:p-2 mb-6 rounded-lg shadow-md"
             >
               {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post avec la description du post*/}
               <div className="flex flex-col mb-4">
@@ -243,7 +243,7 @@ function ReadPost({ user }) {
                 </video>
               )}
               {post.type === "audio" && (
-                <audio className="mb-4 xs:w-60" controls>
+                <audio className="mb-4 w-full max-w-sm rounded-lg" controls>
                   <source src={post.content} type="audio/mpeg" />
                   Your browser does not support the audio element.
                 </audio>
@@ -270,7 +270,7 @@ function ReadPost({ user }) {
               />
 
               {/* Zone de commentaires */}
-              <div className="bg-gray-700 p-4 rounded-lg space-y-4">
+              <div className="bg-gray-700 p-4  rounded-lg space-y-2 xs:p-1">
                 <h3 className="text-xl font-semibold">Comments</h3>
 
                 {post.comments ? (
@@ -336,7 +336,7 @@ function ReadPost({ user }) {
                             handleReplyChange(e, post.id, commentId)
                           }
                           placeholder="Reply to this comment"
-                          className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-0 xs:text-xs"
+                          className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-0 xs:text-xs  w-full max-w-sm"
                         />
 
                         <button
@@ -371,13 +371,13 @@ function ReadPost({ user }) {
                 )}
 
                 {/* Ajouter un commentaire */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 xs:space-x-1 ">
                   <input
                     type="text"
                     value={newComment[post.id] || ""}
                     onChange={(e) => handleCommentChange(e, post.id)}
                     placeholder="Add a comment"
-                    className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-1 xs:text-xs"
+                    className="flex-1 p-1  sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-1 xs:text-xs  w-full max-w-sm"
                   />
                   <button
                     onClick={() => handleCommentSubmit(post.id, post.type)}
