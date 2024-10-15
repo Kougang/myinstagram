@@ -54,9 +54,9 @@ function CreatePost({ user }) {
       userName: user?.displayName, // Ajout du nom d'utilisateur
       userProfilePhoto: user?.photoURL, // Ajout de la photo de profil de l'utilisateur
       stickers: {
-        thumbsUp: { count: 3 },
-        heart: { count: 5 },
-        smile: { count: 2 },
+        thumbsUp: { count: 0 },
+        heart: { count: 0 },
+        smile: { count: 0 },
         sad: { count: 0 },
       },
     });
