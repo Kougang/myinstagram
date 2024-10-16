@@ -38,7 +38,7 @@ function UpdatePassword() {
           id="pwd"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className=" m-2 border-2 border-black border-solid"
+          className="text-black m-2 border-2 border-black border-solid"
         />
         <br />
 
@@ -50,7 +50,7 @@ function UpdatePassword() {
           id="npw"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className=" m-2 border-2 border-black border-solid"
+          className="text-black m-2 border-2 border-black border-solid"
         />
         <button
           type="submit"
