@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -79,7 +78,6 @@ function SignInUp({ user }) {
   };
 
   const handleSignIn = (e) => {
-    // console.log(email, password);
     e.preventDefault();
 
     if (!email || !password) {
@@ -130,16 +128,16 @@ function SignInUp({ user }) {
   }
 
   return (
-    <section className="flex items-center justify-center">
-      <div className="w-full h-screen bg-slate-900 border border-white w-2/5 p-6 flex flex-col items-center">
-        <form className="flex flex-col gap-2 bg-slate-50 p-5 rounded shadow-md">
+    <section className="flex items-center justify-center min-h-screen bg-slate-900">
+      <div className="w-full max-w-md p-6   rounded-md shadow-lg">
+        <form className="flex flex-col gap-4 bg-slate-50 p-6 rounded shadow-md">
           {isSignUpActive && (
-            <h1 className="text-center text-slate-900 text-4xl mb-3">
+            <h1 className="text-center text-slate-900 text-3xl mb-4">
               Sign Up
             </h1>
           )}
           {!isSignUpActive && (
-            <h1 className="text-center text-slate-900 text-4xl mb-3">
+            <h1 className="text-center text-slate-900 text-3xl mb-4">
               Sign In
             </h1>
           )}
@@ -168,34 +166,22 @@ function SignInUp({ user }) {
           />
 
           <label className="text-slate-900">Password</label>
-          <div className="xs:flex ">
+          <div className="flex items-center">
             <input
               type={showPassword ? "text" : "password"}
               onChange={handlePasswordChange}
               name="password"
-              className="h-10 w-auto border border-slate-900 rounded p-4"
+              className="h-10 w-full border border-slate-900 rounded p-4"
               required
             />
-
-            {showPassword ? (
-              <span
-                role="img"
-                aria-label="Hide password"
-                onClick={handleEyes}
-                className="xs:mt-2"
-              >
-                👁️
-              </span>
-            ) : (
-              <span
-                role="img"
-                aria-label="Show password"
-                onClick={handleEyes}
-                className="xs:mt-2"
-              >
-                👁️‍🗨️
-              </span>
-            )}
+            <span
+              role="img"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={handleEyes}
+              className="cursor-pointer ml-2"
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </span>
           </div>
 
           {field && <p className="text-red-500 text-center">{errorMessage}</p>}
@@ -204,58 +190,30 @@ function SignInUp({ user }) {
             <button
               onClick={handleSignUp}
               type="submit"
-              className="bg-slate-900 px-3 py-1.5 text-white my-3 rounded hover:bg-blue-700"
-              disabled={!isUsernameAvailable} // Désactiver le bouton si le nom d'utilisateur n'est pas disponible
+              className="bg-slate-900 px-3 py-2 text-white mt-3 rounded hover:bg-blue-700"
+              disabled={!isUsernameAvailable}
             >
               Sign Up
             </button>
           )}
 
           {!isSignUpActive && (
-            <div className="flex items-center justify-center">
-              {!badpe && (
-                <button
-                  onClick={handleSignIn}
-                  type="submit"
-                  className="bg-slate-900 px-3 py-1.5 text-white my-3  rounded hover:bg-blue-700"
-                >
-                  Sign In
-                </button>
-              )}
-
-              {badpe && (
-                <div className="flex  flex-col items-center justify-center">
-                  <p className="text-red-500">{badpeErrorMessage}</p>
-                  <button
-                    onClick={handleSignIn}
-                    type="submit"
-                    className="bg-slate-900 px-3 py-1.5 text-white my-3  rounded hover:bg-red-700"
-                  >
-                    Sign In
-                  </button>
-                </div>
-              )}
-            </div>
+            <button
+              onClick={handleSignIn}
+              type="submit"
+              className="bg-slate-900 px-3 py-2 text-white mt-3 rounded hover:bg-blue-700"
+            >
+              Sign In
+            </button>
           )}
 
-          {isSignUpActive && (
-            <a
-              onClick={handleFormChange}
-              href="#"
-              className="text-red-500 hover:text-red-900"
-            >
-              Login
-            </a>
-          )}
-          {!isSignUpActive && (
-            <a
-              onClick={handleFormChange}
-              href="#"
-              className="text-red-500 hover:text-red-900"
-            >
-              Create an account
-            </a>
-          )}
+          <a
+            onClick={handleFormChange}
+            href="#"
+            className="text-red-500 hover:text-red-900 text-center mt-4"
+          >
+            {isSignUpActive ? "Login" : "Create an account"}
+          </a>
         </form>
       </div>
     </section>
