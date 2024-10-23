@@ -80,3 +80,7 @@ pages
 - **bibliographie**
 
 - **Using Tailwind, we defined a breakpoint so the site is responsive on both mobile and desktop.**
+
+## credentials
+- **email: huile@gmail.com, pwd: cccvvvv**
+  
