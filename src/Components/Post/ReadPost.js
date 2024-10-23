@@ -18,7 +18,7 @@ function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
   const [newComment, setNewComment] = useState({});
   const [newReply, setNewReply] = useState({});
-  const [likes, setLikes] = useState({});
+  const [flag, setFlag] = useState(false);
   const [uName, setUName] = useState("");
   const [uProfilePhoto, setUProfilePhoto] = useState("");
   const [isExpanded, setIsExpanded] = useState({});
@@ -61,6 +61,9 @@ function ReadPost({ user }) {
   }, []);
 
   const handleCommentSubmit = (postId, postType, parentCommentId = null) => {
+    if (flag === false) {
+      return;
+    }
     const db = getDatabase(app);
     const commentRef = parentCommentId
       ? ref(
@@ -123,13 +126,16 @@ function ReadPost({ user }) {
     } else {
       setNewComment((prev) => ({ ...prev, [postId]: "" }));
     }
+    setFlag(false);
   };
 
   const handleCommentChange = (e, postId) => {
     setNewComment((prev) => ({ ...prev, [postId]: e.target.value }));
+    setFlag(true);
   };
 
   const handleReplyChange = (e, postId, commentId) => {
+    setFlag(true);
     setNewReply((prev) => ({
       ...prev,
       [postId]: {
@@ -201,7 +207,11 @@ function ReadPost({ user }) {
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       {/* Afficher les posts de l'utilisateur cliqué */}
       {selectedUserId ? (
-        <UserProfilePosts posts={filteredPosts} userId={selectedUserId} setSelectedUserId={setSelectedUserId}/>
+        <UserProfilePosts
+          posts={filteredPosts}
+          userId={selectedUserId}
+          setSelectedUserId={setSelectedUserId}
+        />
       ) : (
         <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-3 rounded-lg shadow-lg w-full max-w-4xl">
           <h1 className="text-3xl font-bold">Posts</h1>
@@ -399,6 +409,7 @@ function ReadPost({ user }) {
                       value={newComment[post.id] || ""}
                       onChange={(e) => handleCommentChange(e, post.id)}
                       placeholder="Add a comment"
+                      required
                       className="flex-1 p-1 sm:p-2 text-xs sm:text-sm rounded border border-gray-300 focus:outline-none xs:p-1 xs:text-xs w-full max-w-sm"
                     />
                     <button

@@ -28,15 +28,13 @@ const UserProfilPost = ({ posts, userId, setSelectedUserId }) => {
   }, [userId]);
 
   const handleBackClick = () => {
-    setSelectedUserId(null); // Remettre l'ID sélectionné à null
+    setSelectedUserId(null);
   };
 
-  // Ajouter une vérification pour s'assurer que currentUs est défini avant d'accéder à ses propriétés
   if (!currentUs) {
     return <div>Loading...</div>;
   }
 
-  // Vérifier la condition d'affichage pour les comptes privés
   if (accountType.privacy === "private" && userId !== currentUs.uid) {
     return (
       <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
