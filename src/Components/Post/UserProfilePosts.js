@@ -4,10 +4,10 @@ import { getAuth } from "firebase/auth";
 
 import app from "./../../firebase/firebaseConfig";
 
-const UserProfilPost = ({ posts, userId }) => {
+const UserProfilPost = ({ posts, userId, setSelectedUserId }) => {
   const [isExpanded, setIsExpanded] = useState({});
   const [accountType, setAccountType] = useState("public");
-  const [currentUs, setCurrentUs] = useState();
+  const [currentUs, setCurrentUs] = useState(null); // initialiser à null
 
   useEffect(() => {
     const db = getDatabase();
@@ -16,21 +16,37 @@ const UserProfilPost = ({ posts, userId }) => {
     const user = auth.currentUser;
     setCurrentUs(user);
 
-    // identifiant de l'user ayant cree le post
-    const userRef = ref(db, `users/${userId}`);
-    onValue(userRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setAccountType(snapshot.val());
-      }
-    });
-  }, []);
+    if (userId) {
+      // identifiant de l'utilisateur ayant créé le post
+      const userRef = ref(db, `users/${userId}`);
+      onValue(userRef, (snapshot) => {
+        if (snapshot.exists()) {
+          setAccountType(snapshot.val());
+        }
+      });
+    }
+  }, [userId]);
 
-  console.log(currentUs.uid);
+  const handleBackClick = () => {
+    setSelectedUserId(null); // Remettre l'ID sélectionné à null
+  };
 
+  // Ajouter une vérification pour s'assurer que currentUs est défini avant d'accéder à ses propriétés
+  if (!currentUs) {
+    return <div>Loading...</div>;
+  }
+
+  // Vérifier la condition d'affichage pour les comptes privés
   if (accountType.privacy === "private" && userId !== currentUs.uid) {
     return (
       <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
         <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-3 rounded-lg shadow-lg w-full max-w-4xl">
+          <div
+            className="cursor-pointer text-white mb-4 self-start"
+            onClick={handleBackClick}
+          >
+            &#8592; Back
+          </div>
           <h1 className="text-3xl font-bold">This account is private</h1>
         </section>
       </div>
@@ -47,7 +63,13 @@ const UserProfilPost = ({ posts, userId }) => {
   return (
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-3 rounded-lg shadow-lg w-full max-w-4xl">
-        <h1 className="text-3xl font-bold">{posts[0].userName} posts</h1>
+        <div
+          className="cursor-pointer text-white mb-4 self-start"
+          onClick={handleBackClick}
+        >
+          &#8592; Back
+        </div>
+        <h1 className="text-3xl font-bold">{posts[0]?.userName} posts</h1>
 
         {posts.length > 0 ? (
           posts.map((post) => (

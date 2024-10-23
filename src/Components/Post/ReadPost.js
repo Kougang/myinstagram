@@ -191,10 +191,6 @@ function ReadPost({ user }) {
     setTotalLikes(newTotalLikes); // Mettre à jour le total des likes
   };
 
-  // Nouvelle fonction pour gérer le clic sur un profil
-  // const handleViewProfile = (userId) => {
-  //   setSelectedUserId(userId);
-  // };
   const handleUserClick = (userId) => {
     setSelectedUserId(userId);
     const filtered = posts.filter((post) => post.userId === userId);
@@ -205,7 +201,7 @@ function ReadPost({ user }) {
     <div className="flex items-center justify-center bg-slate-900 w-full min-h-screen py-10">
       {/* Afficher les posts de l'utilisateur cliqué */}
       {selectedUserId ? (
-        <UserProfilePosts posts={filteredPosts} userId={selectedUserId} />
+        <UserProfilePosts posts={filteredPosts} userId={selectedUserId} setSelectedUserId={setSelectedUserId}/>
       ) : (
         <section className="bg-blue-500 text-slate-900 flex flex-col items-center justify-center space-y-8 p-8 xs:p-3 rounded-lg shadow-lg w-full max-w-4xl">
           <h1 className="text-3xl font-bold">Posts</h1>

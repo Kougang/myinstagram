@@ -68,6 +68,7 @@ After log in successfuly user can
 - **comment post**,
 - **Delete comment if he's the author**,
 - **make the comment of comment on the post**
+- **Privacy(private or public)after click on picture or name of user on any post, you can see profil, but if privacy is private, you cannot see abything**
 
 pages
 
