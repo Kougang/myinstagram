@@ -51,8 +51,8 @@ function CreatePost({ user }) {
       type: postType,
       description,
       timestamp: Date.now(),
-      userName: user?.displayName, // Ajout du nom d'utilisateur
-      userProfilePhoto: user?.photoURL, // Ajout de la photo de profil de l'utilisateur
+      userName: user?.displayName,
+      userProfilePhoto: user?.photoURL,
       stickers: {
         thumbsUp: { count: 0 },
         heart: { count: 0 },
