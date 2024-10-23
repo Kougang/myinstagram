@@ -112,7 +112,7 @@ const UserProfilPost = ({ posts, userId, setSelectedUserId }) => {
               {post.type === "text" && <p className="mb-4">{post.content}</p>}
               {post.type === "image" && (
                 <img
-                  className="mb-4 w-full max-w-sm rounded-lg"
+                  className="mb-4 w-full  rounded-lg"
                   src={post.content}
                   alt={post.description}
                 />
