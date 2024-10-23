@@ -11,7 +11,7 @@ function UpdateDisplayName() {
     e.preventDefault();
     try {
       await updateProfile(user, { displayName });
-      alert("Nom mis à jour avec succès!");
+      alert("Name succes update!");
     } catch (error) {
       console.error("Erreur lors de la mise à jour du nom", error);
       alert("Une erreur est survenue lors de la mise à jour du nom.");
