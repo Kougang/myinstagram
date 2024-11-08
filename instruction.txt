@@ -1,0 +1,18 @@
+Il manque une barre de recherche. Elle devrait permettre à l'utilisateur de rechercher des tags et d'autres personnes.
+
+Réagir aux publications (en cliquant sur les émoticônes sous une publication, devrait permettre à l'utilisateur de supprimer également la réaction) Même si vous pouvez suivre d'autres utilisateurs, vous n'avez pas la possibilité de les suivre. De plus, en termes d'interface utilisateur, lorsque vous accédez au profil de quelqu'un d'autre, le formulaire pour créer une nouvelle publication est toujours là, ce qui semble un peu déroutant.
+
+Les publications et les commentaires n'affichent pas la date de leur création.
+
+Assurez-vous d'avoir tous les fichiers du projet à la racine de votre répertoire.
+
+Les messages du journal Git sont présentés, mais pour la taille du projet, ils pourraient être plus significatifs et 
+simplement avoir plus de commits (un par fonctionnalité ajoutée, bug corrigé, etc.) : https://www.freecodecamp.org/news/ 
+how-to-write-better-git-commit-messages/ Il a certaines des fonctionnalités d'Instagram, mais il est définitivement un 
+peu décalé. Assurez-vous de télécharger Instagram et de voir ce qui pourrait être amélioré sur votre projet, pour vous en 
+rapprocher (à la fois en termes d'interface utilisateur/UX et de fonctionnalités). Bonne chance pour votre prochaine
+ itération.
+
+impimplemtner une bar de recherche permettant de chercher des utilisateurs, des groupes,..su
+afficher la date de creation du post et des commenttaires
+suprimer  la possiblite de creer un post apres click sur lutilisateur
