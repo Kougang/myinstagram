@@ -329,6 +329,11 @@ function ReadPost({ user }) {
                               <p className="text-gray-400">
                                 {post.comments[commentId]?.userName}
                               </p>
+                              <p className="ml-2 text-gray-400 ">
+                                {new Date(
+                                  post.comments[commentId].createdAt
+                                ).toLocaleString()}
+                              </p>
                             </div>
                           ) : (
                             <div className="flex">
@@ -339,6 +344,11 @@ function ReadPost({ user }) {
                               />
                               <p className="text-gray-400">
                                 {post.comments[commentId]?.userName || uName}
+                              </p>
+                              <p className="ml-2 text-gray-400 text-xs">
+                                {new Date(
+                                  post.comments[commentId].createdAt
+                                ).toLocaleString()}
                               </p>
                             </div>
                           )}
@@ -360,9 +370,11 @@ function ReadPost({ user }) {
                             </button>
                           )}
                         </div>
-                        <p className="text-gray-300">
-                          {post.comments[commentId].text}
-                        </p>
+                        <div className="flex">
+                          <p className="text-gray-300">
+                            {post.comments[commentId].text}
+                          </p>
+                        </div>
 
                         {/* Répondre à un commentaire */}
                         <div className="flex items-center space-x-2 sm:space-x-4 mt-4">
