@@ -6,6 +6,8 @@ import CreatePost from "../Post/CreatePost";
 import ReadPost from "../Post/ReadPost";
 import Header from "./Header";
 import Footer from "./Footer";
+import UserSearch from "./../Post/UserSearch";
+
 import "../Style/index.css";
 
 function Home() {
@@ -21,11 +23,22 @@ function Home() {
     });
     return () => unsubscribe();
   }, []);
+
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    // Vous pouvez ajouter des actions supplémentaires ici
+    console.log("Selected User:", user);
+  };
+
   return (
     // px-6 py-3 text-white rounded hover:bg-blue-700
     <div className="flex items-center justify-center  bg-gray-800">
       <section className="  bg-slate-900 flex flex-col w-full md:w-2/5 items-center justify-center space-y-4">
         <Header user={user} />
+        <UserSearch onUserSelect={handleUserSelect} />
+
         <CreatePost user={user} />
         <ReadPost user={user} />
         <Footer />
