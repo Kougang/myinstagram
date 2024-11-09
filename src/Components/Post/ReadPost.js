@@ -225,16 +225,23 @@ function ReadPost({ user }) {
                 {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post avec la description du post */}
                 <div className="flex flex-col mb-4">
                   {post.userProfilePhoto ? (
-                    <div
-                      onClick={() => handleUserClick(post.userId)}
-                      className="flex mb-4 cursor-pointer"
-                    >
-                      <img
-                        src={post.userProfilePhoto}
-                        alt={post.userName}
-                        className="w-8 h-8 rounded-full mr-2"
-                      />
-                      <span>{post.userName}</span>
+                    <div onClick={() => handleUserClick(post.userId)}>
+                      <div className="flex flex-rows ">
+                        <div className="flex mb-4 cursor-pointer">
+                          <img
+                            src={post.userProfilePhoto}
+                            alt={post.userName}
+                            className="w-8 h-8 rounded-full mr-2"
+                          />
+                          <span>{post.userName}</span>
+                        </div>
+                        <div>
+                          <span className="ml-4 mtext-gray-300 text-sm">
+                            Posted on:{" "}
+                            {new Date(post.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex mb-4">
