@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import app from "./../../firebase/firebaseConfig";
-
 import { getDatabase, ref, update, onValue } from "firebase/database";
 
 function HandleStickerLike({
@@ -12,22 +11,29 @@ function HandleStickerLike({
   userID,
 }) {
   const [totalLikesTemp, settotalLikesTemp] = useState(0);
-  const [likedSticker, setLikedSticker] = useState(null); // Le sticker actuellement liké
+  const [likedSticker, setLikedSticker] = useState(null);
 
+  // Fetch stickers only if not already fetched or if postId changes
   useEffect(() => {
     const db = getDatabase(app);
     const stickerRef = ref(db, `posts/${postType}/${postId}/stickers`);
 
-    // Récupérer les stickers depuis Firebase au chargement du composant
-    onValue(stickerRef, (snapshot) => {
+    const listener = onValue(stickerRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        setStickers((prevStickers) => ({
-          ...prevStickers,
-          [postId]: data,
-        }));
+        setStickers((prevStickers) => {
+          if (prevStickers[postId]) {
+            // If no change, return the existing state
+            if (JSON.stringify(prevStickers[postId]) === JSON.stringify(data)) {
+              return prevStickers;
+            }
+          }
+          return {
+            ...prevStickers,
+            [postId]: data,
+          };
+        });
 
-        // Calculer la somme totale des likes des stickers
         const totalLikes = Object.values(data || {}).reduce(
           (sum, sticker) => sum + (sticker.count || 0),
           0
@@ -37,101 +43,92 @@ function HandleStickerLike({
         settotalLikesTemp(totalLikes);
       }
     });
+
+    return () => {
+      // Clean up the listener when component unmounts
+      listener();
+    };
   }, [postId, postType, setStickers, onTotalChange]);
 
-  const handleStickerLike = (stickerType) => {
-    const userId = userID;
-    if (!userId) return; // S'assurer que l'utilisateur est connecté
+  const handleStickerLike = useCallback(
+    (stickerType) => {
+      const userId = userID;
+      if (!userId) return; // Ensure the user is logged in
 
-    const db = getDatabase(app);
-    const stickerRef = ref(
-      db,
-      `posts/${postType}/${postId}/stickers/${stickerType}`
-    );
-    const stickerUserRef = ref(
-      db,
-      `posts/${postType}/${postId}/stickers/${stickerType}/users/${userId}`
-    );
+      const db = getDatabase(app);
+      const stickerRef = ref(
+        db,
+        `posts/${postType}/${postId}/stickers/${stickerType}`
+      );
+      const stickerUserRef = ref(
+        db,
+        `posts/${postType}/${postId}/stickers/${stickerType}/users/${userId}`
+      );
 
-    // Vérifier si l'utilisateur a déjà liké ce sticker
-    onValue(
-      stickerUserRef,
-      (snapshot) => {
-        const alreadyLiked = snapshot.exists();
-        const currentCount = stickers[postId]?.[stickerType]?.count || 0;
+      // Check if the user has already liked this sticker
+      onValue(
+        stickerUserRef,
+        (snapshot) => {
+          const alreadyLiked = snapshot.exists();
+          const currentCount = stickers[postId]?.[stickerType]?.count || 0;
 
-        // Si l'utilisateur clique à nouveau, on décrémente, sinon on incrémente
-        const newCount = alreadyLiked ? currentCount - 1 : currentCount + 1;
+          const newCount = alreadyLiked ? currentCount - 1 : currentCount + 1;
 
-        // Mettre à jour le compteur et verrouiller les autres stickers
-        const updates = {
-          count: newCount,
-          [`users/${userId}`]: !alreadyLiked ? true : null,
-        };
-        update(stickerRef, updates);
-
-        setStickers((prevStickers) => {
-          const updatedStickers = {
-            ...prevStickers,
-            [postId]: {
-              ...prevStickers[postId],
-              [stickerType]: {
-                count: newCount,
-                users: {
-                  ...prevStickers[postId]?.[stickerType]?.users,
-                  [userId]: !alreadyLiked ? true : null,
-                },
-              },
-            },
+          const updates = {
+            count: newCount,
+            [`users/${userId}`]: !alreadyLiked ? true : null,
           };
 
-          // Calculer la nouvelle somme totale des likes
-          const newTotalLikes = Object.values(
-            updatedStickers[postId] || {}
-          ).reduce((sum, sticker) => sum + (sticker.count || 0), 0);
+          update(stickerRef, updates);
 
-          onTotalChange(newTotalLikes);
-          settotalLikesTemp(newTotalLikes);
+          setStickers((prevStickers) => {
+            const updatedStickers = {
+              ...prevStickers,
+              [postId]: {
+                ...prevStickers[postId],
+                [stickerType]: {
+                  count: newCount,
+                  users: {
+                    ...prevStickers[postId]?.[stickerType]?.users,
+                    [userId]: !alreadyLiked ? true : null,
+                  },
+                },
+              },
+            };
 
-          // Mettre à jour le sticker actuellement liké ou l'enlever si le like est retiré
-          setLikedSticker(alreadyLiked ? null : stickerType);
+            const newTotalLikes = Object.values(
+              updatedStickers[postId] || {}
+            ).reduce((sum, sticker) => sum + (sticker.count || 0), 0);
 
-          return updatedStickers;
-        });
-      },
-      { onlyOnce: true }
-    );
-  };
+            onTotalChange(newTotalLikes);
+            settotalLikesTemp(newTotalLikes);
+
+            setLikedSticker(alreadyLiked ? null : stickerType);
+
+            return updatedStickers;
+          });
+        },
+        { onlyOnce: true }
+      );
+    },
+    [postId, postType, stickers, userID, setStickers, onTotalChange]
+  );
 
   return (
     <div>
-      <button
-        onClick={() => handleStickerLike("thumbsUp")}
-        disabled={likedSticker && likedSticker !== "thumbsUp"}
-      >
-        👍 {stickers[postId]?.thumbsUp?.count || 0}
-      </button>
-
-      <button
-        onClick={() => handleStickerLike("heart")}
-        disabled={likedSticker && likedSticker !== "heart"}
-      >
-        ❤️ {stickers[postId]?.heart?.count || 0}
-      </button>
-
-      <button
-        onClick={() => handleStickerLike("smile")}
-        disabled={likedSticker && likedSticker !== "smile"}
-      >
-        😊 {stickers[postId]?.smile?.count || 0}
-      </button>
-
-      <button
-        onClick={() => handleStickerLike("sad")}
-        disabled={likedSticker && likedSticker !== "sad"}
-      >
-        😢 {stickers[postId]?.sad?.count || 0}
-      </button>
+      {["thumbsUp", "heart", "smile", "sad"].map((stickerType) => (
+        <button
+          key={stickerType}
+          onClick={() => handleStickerLike(stickerType)}
+          disabled={likedSticker && likedSticker !== stickerType}
+        >
+          {stickerType === "thumbsUp" && "👍"}
+          {stickerType === "heart" && "❤️"}
+          {stickerType === "smile" && "😊"}
+          {stickerType === "sad" && "😢"}{" "}
+          {stickers[postId]?.[stickerType]?.count || 0}
+        </button>
+      ))}
       <span className="border-2 border-blue-500 rounded">{totalLikesTemp}</span>
     </div>
   );
