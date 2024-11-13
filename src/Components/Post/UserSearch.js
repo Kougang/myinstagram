@@ -9,17 +9,19 @@ import {
 } from "firebase/database";
 import app from "./../../firebase/firebaseConfig";
 
-function UserSearch({ onUserSelect }) {
+function UserSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+    if (searchTerm.trim() === "") return; // Ne lance pas la recherche si le champ est vide
     setLoading(true);
     const db = getDatabase(app);
+
     const userRef = query(
       ref(db, "users"),
-      orderByChild("userName"),
+      orderByChild("displayName"),
       equalTo(searchTerm)
     );
 
@@ -53,6 +55,7 @@ function UserSearch({ onUserSelect }) {
       <button
         onClick={handleSearch}
         className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded mt-2"
+        disabled={loading}
       >
         {loading ? "Searching..." : "Search"}
       </button>
@@ -62,15 +65,14 @@ function UserSearch({ onUserSelect }) {
           {searchResults.map((user) => (
             <li
               key={user.id}
-              onClick={() => onUserSelect(user)}
               className="cursor-pointer text-blue-400 hover:underline"
             >
-              {user.userName}
+              {user.displayName || "No displayName"}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-gray-300 mt-4">No users found.</p>
+        !loading && <p className="text-gray-300 mt-4">No users found.</p>
       )}
     </div>
   );

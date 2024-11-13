@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
 import app from "./../../firebase/firebaseConfig";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  push,
-  remove,
-  update,
-} from "firebase/database";
+import { getDatabase, ref, onValue, push, remove } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import HandleStickerLike from "./HandleStickerLike";
-import handleDeleteComment from "./handleDeleteComment";
 import UserProfilePosts from "./UserProfilePosts";
 
 function ReadPost({ user }) {

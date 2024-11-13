@@ -7,6 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import ProtectedRoute from "./Components/Pages/Protected/ProtectedRoute";
 import { auth } from "./firebase/firebaseConfig";
+import UserSearch from "./Components/Post/UserSearch";
 
 import CreatePost from "./Components/Post/CreatePost";
 import ReadPosts from "./Components/Post/ReadPost";
@@ -84,20 +85,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/*..................
-          <Route path="/parameter" element={<UserProfile />} />
+          {/*
           <Route
-            path="/contact"
+            path="/search"
             element={
               <ProtectedRoute user={user}>
-                <Contact />
+                <UserSearch />
               </ProtectedRoute>
             }
-          />
-          <Route path="/about" element={<About />} />
-          <Route path="/bibliographie" element={<Bibliographie />} />
-          <Route path="/lockout" element={<LockOut />} />
-          */}
+          />*/}
         </Routes>
       </Router>
     </div>
