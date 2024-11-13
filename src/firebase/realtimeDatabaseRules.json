@@ -1,0 +1,15 @@
+// actual rules
+
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "users": {
+      ".indexOn": "displayName"
+    }
+  }
+  //"rules": {
+  // ".read": true,
+  // ".write": true
+  //}
+}
