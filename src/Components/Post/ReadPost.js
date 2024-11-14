@@ -5,6 +5,7 @@ import { getDatabase, ref, onValue, push, remove } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import HandleStickerLike from "./HandleStickerLike";
 import UserProfilePosts from "./UserProfilePosts";
+import FollowButton from "./FollowButton";
 
 function ReadPost({ user }) {
   const [posts, setPosts] = useState([]);
@@ -217,9 +218,12 @@ function ReadPost({ user }) {
                 {/* Afficher le nom et la photo de profil de l'utilisateur qui a fait le post avec la description du post */}
                 <div className="flex flex-col mb-4">
                   {post.userProfilePhoto ? (
-                    <div onClick={() => handleUserClick(post.userId)}>
+                    <div>
                       <div className="flex flex-rows ">
-                        <div className="flex mb-4 cursor-pointer">
+                        <div
+                          onClick={() => handleUserClick(post.userId)}
+                          className="flex mb-4 cursor-pointer"
+                        >
                           <img
                             src={post.userProfilePhoto}
                             alt={post.userName}
@@ -227,11 +231,19 @@ function ReadPost({ user }) {
                           />
                           <span>{post.userName}</span>
                         </div>
-                        <div>
+                        <div onClick={() => handleUserClick(post.userId)}>
                           <span className="ml-4 mtext-gray-300 text-sm">
-                            Posted on:{" "}
                             {new Date(post.timestamp).toLocaleString()}
                           </span>
+                        </div>
+                        <div className="ml-4 ">
+                          {/* Bouton de suivi */}
+                          {post.userId !== user?.uid && (
+                            <FollowButton
+                              currentUserId={user?.uid}
+                              targetUserId={post.userId}
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
