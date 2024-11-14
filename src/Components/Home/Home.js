@@ -37,7 +37,7 @@ function Home() {
     <div className="flex items-center justify-center  bg-gray-800">
       <section className="  bg-slate-900 flex flex-col w-full md:w-2/5 items-center justify-center space-y-4">
         <Header user={user} />
-        <UserSearch />
+        <UserSearch user={user} />
 
         <CreatePost user={user} />
         <ReadPost user={user} />
