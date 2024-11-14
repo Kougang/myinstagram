@@ -53,7 +53,7 @@ function UserSearch({ user }) {
 
   const checkFollowStatus = (targetUserId) => {
     console.log("currentUserId", currentUserId);
-    // console.log(currentUser);
+
     const db = getDatabase(app);
     const followRef = ref(db, `followers/${currentUserId}/${targetUserId}`);
 

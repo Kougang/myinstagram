@@ -69,6 +69,9 @@ After log in successfuly user can
 - **Delete comment if he's the author**,
 - **make the comment of comment on the post**
 - **Privacy(private or public)after click on picture or name of user on any post, you can see profil, but if privacy is private, you cannot see abything**
+- **Search user with his name**
+- **follow and unfollow the user**
+- **see date on a post and comment**
 
 pages
 
@@ -82,5 +85,5 @@ pages
 - **Using Tailwind, we defined a breakpoint so the site is responsive on both mobile and desktop.**
 
 ## credentials
+
 - **email: huile@gmail.com, pwd: cccvvvv**
-  
