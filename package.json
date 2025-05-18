@@ -7,7 +7,7 @@
     "autoprefixer": "^10.4.20",
     "cra-template": "1.2.0",
     "dotenv": "^16.4.5",
-    "firebase": "^10.13.1",
+    "firebase": "^11.0.0",
     "firebase-admin": "^12.7.0",
     "firebaseui": "^6.1.0",
     "git-filter-repo": "^0.0.30",
